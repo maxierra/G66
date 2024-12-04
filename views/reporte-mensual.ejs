@@ -1,0 +1,1981 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <base href="." />
+    <title>Dashboard Global 66</title>
+    <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@300;400;500;700&display=swap" rel="stylesheet">
+    <style>
+        /* Estilos generales */
+body {
+    font-family: 'Roboto', sans-serif;
+    padding: 20px;
+    background: linear-gradient(135deg, #f5f6fa 0%, #dfe6e9 100%);
+    color: #2d3436;
+    margin: 0;
+    transition: background 0.3s ease;
+}
+
+.container {
+    max-width: 1400px;
+    margin: 0 auto;
+    padding: 20px;
+    background: white;
+    border-radius: 12px;
+    box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+}
+
+h1, h2 {
+    color: #2d3436;
+    border-bottom: 2px solid #0984e3;
+    padding-bottom: 10px;
+    margin-top: 30px;
+    transition: all 0.3s ease;
+}
+
+h1 {
+    font-size: 24px;
+    text-align: center;
+}
+
+h2 {
+    font-size: 20px;
+    margin-bottom: 20px;
+}
+
+/* Contenedor de indicadores */
+.gauge-container {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+    gap: 25px;
+    margin: 30px 0;
+}
+
+.gauge {
+    text-align: center;
+    padding: 20px;
+    background: white;
+    border-radius: 12px;
+    box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+    transition: transform 0.2s, box-shadow 0.2s;
+    position: relative;
+    overflow: hidden;
+}
+
+.gauge:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 6px 12px rgba(0,0,0,0.15);
+}
+
+.gauge::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 4px;
+    background: linear-gradient(90deg, #0984e3, #00b894);
+}
+
+.gauge h3 {
+    margin: 0 0 15px 0;
+    color: #2d3436;
+    font-size: 16px;
+    position: relative;
+    padding-bottom: 15px;
+}
+
+.gauge h3::after {
+    content: '';
+    position: absolute;
+    bottom: 0;
+    left: 50%;
+    transform: translateX(-50%);
+    width: 50px;
+    height: 2px;
+    background: #0984e3;
+}
+
+.gauge-value {
+    font-size: 24px;
+    font-weight: 700;
+    color: #0984e3;
+    margin-top: 10px;
+    text-shadow: 2px 2px 4px rgba(0,0,0,0.1);
+}
+
+.gauge canvas {
+    max-width: 100%;
+    height: auto;
+}
+
+/* Contenedor de tabla */
+.table-container {
+    background: white;
+    border-radius: 12px;
+    padding: 20px;
+    box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+    margin: 20px 0;
+    overflow-x: auto;
+}
+
+table {
+    width: 100%;
+    border-collapse: separate;
+    border-spacing: 0;
+    margin: 0;
+}
+
+th, td {
+    border: none;
+    padding: 15px;
+    text-align: left;
+    border-bottom: 1px solid #e1e1e1;
+    transition: background 0.3s ease;
+}
+
+th {
+    background: #f8f9fa;
+    font-weight: 500;
+    color: #2d3436;
+    position: sticky;
+    top: 0;
+}
+
+tr:hover {
+    background-color: #f8f9fa;
+}
+
+.editable {
+    background-color: #fff8dc;
+    padding: 8px;
+    border: 1px solid #ddd;
+    border-radius: 4px;
+    min-width: 60px;
+    transition: all 0.3s;
+}
+
+.editable:hover {
+    background-color: #fff3cd;
+    border-color: #0984e3;
+}
+
+.warning { background-color: #fff3cd; }
+.danger { background-color: #f8d7da; }
+
+.percentage::after {
+    content: '%';
+    color: #636e72;
+}
+
+.value-display {
+    font-size: 24px;
+    font-weight: 500;
+    color: #0984e3;
+    margin-top: 10px;
+}
+
+/* Media queries */
+@media (max-width: 768px) {
+    .container {
+        padding: 10px;
+    }
+
+    .gauge-container {
+        grid-template-columns: 1fr;
+    }
+}
+
+/* Contenedor de penalizaciones */
+.penalties-container {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+    gap: 25px;
+    margin: 30px 0;
+    padding: 20px;
+}
+
+.penalty-card {
+    background: linear-gradient(145deg, #ffffff, #f5f6fa);
+    border-radius: 20px;
+    padding: 30px;
+    box-shadow: 0 10px 20px rgba(0,0,0,0.08);
+    text-align: center;
+    transition: all 0.3s ease;
+    border: 1px solid rgba(255,255,255,0.8);
+    position: relative;
+    overflow: hidden;
+}
+
+.penalty-card:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 15px 30px rgba(0,0,0,0.12);
+}
+
+.penalty-card::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 4px;
+    background: linear-gradient(90deg, #0984e3, #00b894);
+}
+
+.penalty-card h3 {
+    margin: 0 0 20px 0;
+    color: #2d3436;
+    font-size: 22px;
+    font-weight: 600;
+    position: relative;
+    padding-bottom: 15px;
+}
+
+.penalty-card h3::after {
+    content: '';
+    position: absolute;
+    bottom: 0;
+    left: 50%;
+    transform: translateX(-50%);
+    width: 50px;
+    height: 2px;
+    background: #0984e3;
+}
+
+.penalty-value {
+    font-size: 42px;
+    font-weight: 700;
+    color: #2d3436;
+    margin: 25px 0;
+    text-shadow: 2px 2px 4px rgba(0,0,0,0.1);
+    font-family: 'Roboto', sans-serif;
+}
+
+.penalty-status {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 10px;
+    font-size: 18px;
+    padding: 12px 20px;
+    border-radius: 12px;
+    margin-top: 20px;
+    transition: all 0.3s ease;
+}
+
+.status-indicator {
+    width: 14px;
+    height: 14px;
+    border-radius: 50%;
+    display: inline-block;
+    box-shadow: 0 0 10px rgba(0,0,0,0.1);
+}
+
+.penalty-status.success {
+    color: #27ae60;
+    background-color: rgba(39, 174, 96, 0.1);
+}
+
+.penalty-status.danger {
+    color: #e74c3c;
+    background-color: rgba(231, 76, 60, 0.1);
+}
+
+.penalty-status.success .status-indicator {
+    background-color: #27ae60;
+    box-shadow: 0 0 10px rgba(39, 174, 96, 0.3);
+}
+
+.penalty-status.danger .status-indicator {
+    background-color: #e74c3c;
+    box-shadow: 0 0 10px rgba(231, 76, 60, 0.3);
+}
+
+/* Animación para cuando cambian los valores */
+@keyframes pulse {
+    0% { transform: scale(1); }
+    50% { transform: scale(1.05); }
+    100% { transform: scale(1); }
+}
+
+.penalty-value.updated {
+    animation: pulse 0.5s ease-in-out;
+}
+
+/* Estilos para la tabla de incidencias */
+#incidentsTable {
+    width: 100%;
+    border-collapse: collapse;
+    margin: 20px 0;
+    background: white;
+}
+
+#incidentsTable th {
+    background: #f8f9fa;
+    padding: 12px;
+    text-align: left;
+    font-weight: 600;
+    color: #2d3436;
+    border-bottom: 2px solid #dfe6e9;
+    position: sticky;
+    top: 0;
+}
+
+#incidentsTable td {
+    padding: 10px;
+    border-bottom: 1px solid #dfe6e9;
+    font-size: 14px;
+}
+
+#incidentsTable td.editable {
+    background-color: #fff8dc;
+    padding: 8px;
+    border: 1px solid #ddd;
+    border-radius: 4px;
+    min-width: 60px;
+    transition: all 0.3s;
+}
+
+#incidentsTable td.editable:hover {
+    background-color: #fff3cd;
+    border-color: #0984e3;
+}
+
+#incidentsTable tbody tr:hover {
+    background-color: #f8f9fa;
+}
+
+/* Estilos para estados específicos */
+#incidentsTable td:first-child {
+    font-weight: 500;
+}
+
+#incidentsTable td:first-child:contains('Closed') {
+    color: #27ae60;
+}
+
+/* Hacer la tabla responsive */
+.table-container {
+    overflow-x: auto;
+    margin: 20px 0;
+    background: white;
+    border-radius: 12px;
+    box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+    padding: 20px;
+}
+
+/* Estilo para las fechas */
+#incidentsTable td:nth-child(6),
+#incidentsTable td:nth-child(7),
+#incidentsTable td:nth-child(8) {
+    white-space: nowrap;
+}
+
+/* Estilo para valores numéricos */
+#incidentsTable td:nth-child(9),
+#incidentsTable td:nth-child(10) {
+    text-align: right;
+    font-family: monospace;
+}
+
+/* Estilos para la tabla de novedades */
+#noveltiesTable {
+    width: 100%;
+    border-collapse: collapse;
+    margin: 20px 0;
+    background: white;
+}
+
+#noveltiesTable th {
+    background: #f8f9fa;
+    padding: 15px;
+    text-align: left;
+    font-weight: 600;
+    color: #2d3436;
+    border-bottom: 2px solid #dfe6e9;
+}
+
+#noveltiesTable td {
+    padding: 12px;
+    border-bottom: 1px solid #dfe6e9;
+    font-size: 14px;
+    vertical-align: top;
+}
+
+#noveltiesTable td.editable {
+    background-color: #fff8dc;
+    padding: 12px;
+    border: 1px solid #ddd;
+    border-radius: 4px;
+    min-height: 40px;
+}
+
+#noveltiesTable td.editable:hover {
+    background-color: #fff3cd;
+    border-color: #0984e3;
+}
+
+/* Hacer la descripción más ancha */
+#noveltiesTable td:nth-child(2) {
+    width: 40%;
+    min-width: 300px;
+}
+
+/* Estilo para las fechas */
+#noveltiesTable td:nth-child(1),
+#noveltiesTable td:nth-child(4) {
+    white-space: nowrap;
+    width: 150px;
+}
+
+/* Estilo para punto de bloqueo */
+#noveltiesTable td:nth-child(3) {
+    width: 20%;
+}
+
+/* Estilos para botones de exportación */
+.export-button {
+    background: linear-gradient(145deg, #0984e3, #00b894);
+    color: white;
+    border: none;
+    padding: 12px 24px;
+    border-radius: 8px;
+    font-size: 16px;
+    font-weight: 500;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    transition: all 0.3s ease;
+    box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+}
+
+.export-button:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 6px 12px rgba(0,0,0,0.15);
+    background: linear-gradient(145deg, #00b894, #0984e3);
+}
+
+.button-icon {
+    font-size: 20px;
+}
+
+/* Estilos para el calendario */
+.calendar-container {
+    background: white;
+    border-radius: 12px;
+    padding: 20px;
+    box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+    margin: 20px 0;
+    max-width: 100%;
+}
+
+.calendar-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 20px;
+}
+
+.calendar-header button {
+    background: #0984e3;
+    color: white;
+    border: none;
+    padding: 8px 16px;
+    border-radius: 4px;
+    cursor: pointer;
+    transition: background 0.3s ease;
+}
+
+.calendar-header button:hover {
+    background: #00b894;
+}
+
+.calendar-grid {
+    display: flex;
+    flex-direction: column;
+}
+
+.calendar-days {
+    display: grid;
+    grid-template-columns: repeat(7, 1fr);
+    text-align: center;
+    font-weight: bold;
+    margin-bottom: 10px;
+}
+
+.calendar-dates {
+    display: grid;
+    grid-template-columns: repeat(7, 1fr);
+    gap: 5px;
+    padding: 5px;
+}
+
+.calendar-date {
+    min-height: 80px;
+    padding: 5px;
+    border: 1px solid #e1e1e1;
+    border-radius: 4px;
+    cursor: pointer;
+    position: relative;
+    display: flex;
+    flex-direction: column;
+    background-color: white;
+    transition: background 0.3s ease;
+}
+
+.calendar-date:hover {
+    background-color: #f8f9fa;
+}
+
+.calendar-date.has-task {
+    background-color: #ff4757;
+    color: white;
+}
+
+.calendar-date.has-task .task-preview {
+    color: rgba(255, 255, 255, 0.9);
+}
+
+.calendar-date.has-task:hover {
+    background-color: #ff6b81;
+}
+
+.calendar-date.has-task::after {
+    content: '•';
+    color: white;
+    position: absolute;
+    bottom: 2px;
+    right: 5px;
+}
+
+.day-number {
+    font-weight: bold;
+    margin-bottom: 4px;
+}
+
+.task-preview {
+    font-size: 0.8em;
+    color: #666;
+    overflow: hidden;
+    word-wrap: break-word;
+    line-height: 1.2;
+}
+
+/* Estilos para el modal */
+.modal {
+    display: none;
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(0,0,0,0.5);
+    z-index: 1000;
+    justify-content: center;
+    align-items: center;
+}
+
+.modal-content {
+    background-color: white;
+    padding: 20px;
+    border-radius: 12px;
+    width: 80%;
+    max-width: 500px;
+    box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+    position: relative;
+}
+
+.close {
+    position: absolute;
+    top: 10px;
+    right: 10px;
+    cursor: pointer;
+    font-size: 24px;
+    color: #2d3436;
+    transition: color 0.3s ease;
+}
+
+.close:hover {
+    color: #0984e3;
+}
+
+#taskDescription {
+    width: 100%;
+    height: 100px;
+    margin: 10px 0;
+    padding: 10px;
+    border: 1px solid #e1e1e1;
+    border-radius: 4px;
+    resize: none;
+}
+
+#saveTask {
+    background: #0984e3;
+    color: white;
+    border: none;
+    padding: 8px 16px;
+    border-radius: 4px;
+    cursor: pointer;
+    transition: background 0.3s ease;
+}
+
+#saveTask:hover {
+    background: #00b894;
+}
+    </style>
+</head>
+<body>
+<div class="container">
+    <div class="header-container">
+        <h1>Dashboard Global 66</h1>
+      
+          
+        </button>
+    </div>
+    <div class="gauge-container" id="gauges"></div>
+
+    <h2>Métricas Detalladas</h2>
+    <div class="table-container">
+        <table id="dataTable">
+            <thead>
+                <tr>
+                    <th>Título</th>
+                    <th>Valor 1</th>
+                    <th>Valor 2</th>
+                    <th>Valor Alcanzado</th>
+                    <th>Valor Esperado</th>
+                    <th>Diferencia</th>
+                </tr>
+            </thead>
+            <tbody></tbody>
+        </table>
+    </div>
+
+    <h2>Transacciones por País</h2>
+    <div class="table-container">
+        <table id="processedTable">
+            <thead>
+                <tr>
+                    <th>País</th>
+                    <th>Aprobadas</th>
+                    <th>Rechazadas</th>
+                    <th>Anuladas</th>
+                    <th>Total</th>
+                    <th>Aprobadas (%)</th>
+                    <th>Rechazadas (%)</th>
+                    <th>Anuladas (%)</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <td>Chile</td>
+                    <td contenteditable="true" class="editable">100</td>
+                    <td contenteditable="true" class="editable">10</td>
+                    <td contenteditable="true" class="editable">5</td>
+                    <td class="total">115</td>
+                    <td class="percentage">86.96</td>
+                    <td class="percentage">8.70</td>
+                    <td class="percentage">4.35</td>
+                </tr>
+                <tr>
+                    <td>Perú</td>
+                    <td contenteditable="true" class="editable">80</td>
+                    <td contenteditable="true" class="editable">15</td>
+                    <td contenteditable="true" class="editable">10</td>
+                    <td class="total">105</td>
+                    <td class="percentage">76.19</td>
+                    <td class="percentage">14.29</td>
+                    <td class="percentage">9.52</td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
+
+    <h2>Distribución de Transacciones</h2>
+    <div class="gauge-container" id="processedGauges"></div>
+
+    <h2>Evolución de Tarjetas por Mes</h2>
+    <div class="table-container">
+        <table id="evolutionTable">
+            <thead>
+                <tr>
+                    <th>País</th>
+                    <th>Enero</th>
+                    <th>Febrero</th>
+                    <th>Marzo</th>
+                    <th>Abril</th>
+                    <th>Mayo</th>
+                    <th>Junio</th>
+                    <th>Julio</th>
+                    <th>Agosto</th>
+                    <th>Septiembre</th>
+                    <th>Octubre</th>
+                    <th>Noviembre</th>
+                    <th>Diciembre</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <td>Chile</td>
+                    <td contenteditable="true" class="editable">8770</td>
+                    <td contenteditable="true" class="editable">110</td>
+                    <td contenteditable="true" class="editable">120</td>
+                    <td contenteditable="true" class="editable">130</td>
+                    <td contenteditable="true" class="editable">140</td>
+                    <td contenteditable="true" class="editable">150</td>
+                    <td contenteditable="true" class="editable">160</td>
+                    <td contenteditable="true" class="editable">170</td>
+                    <td contenteditable="true" class="editable">180</td>
+                    <td contenteditable="true" class="editable">190</td>
+                    <td contenteditable="true" class="editable">200</td>
+                    <td contenteditable="true" class="editable">210</td>
+                </tr>
+                <tr>
+                    <td>Perú</td>
+                    <td contenteditable="true" class="editable">120</td>
+                    <td contenteditable="true" class="editable">130</td>
+                    <td contenteditable="true" class="editable">140</td>
+                    <td contenteditable="true" class="editable">150</td>
+                    <td contenteditable="true" class="editable">160</td>
+                    <td contenteditable="true" class="editable">170</td>
+                    <td contenteditable="true" class="editable">180</td>
+                    <td contenteditable="true" class="editable">190</td>
+                    <td contenteditable="true" class="editable">200</td>
+                    <td contenteditable="true" class="editable">210</td>
+                    <td contenteditable="true" class="editable">220</td>
+                    <td contenteditable="true" class="editable">230</td>
+                </tr>
+                <tr>
+                    <td>Total</td>
+                    <td class="total">8890</td>
+                    <td class="total">240</td>
+                    <td class="total">260</td>
+                    <td class="total">280</td>
+                    <td class="total">300</td>
+                    <td class="total">320</td>
+                    <td class="total">340</td>
+                    <td class="total">360</td>
+                    <td class="total">380</td>
+                    <td class="total">400</td>
+                    <td class="total">420</td>
+                    <td class="total">440</td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
+
+    <h2>Gráfico de Evolución de Tarjetas</h2>
+    <div class="gauge-container">
+        <canvas id="evolutionChart"></canvas>
+    </div>
+
+    <h2>Evolución de APIs por Mes</h2>
+    <div class="table-container">
+        <table id="apisTable">
+            <thead>
+                <tr>
+                    <th>Api</th>
+                    <th>Enero</th>
+                    <th>Febrero</th>
+                    <th>Marzo</th>
+                    <th>Abril</th>
+                    <th>Mayo</th>
+                    <th>Junio</th>
+                    <th>Julio</th>
+                    <th>Agosto</th>
+                    <th>Septiembre</th>
+                    <th>Octubre</th>
+                    <th>Noviembre</th>
+                    <th>Diciembre</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <td>Token Acces Level2</td>
+                    <td contenteditable="true" class="editable">0</td>
+                    <td contenteditable="true" class="editable">0</td>
+                    <td contenteditable="true" class="editable">0</td>
+                    <td contenteditable="true" class="editable">0</td>
+                    <td contenteditable="true" class="editable">0</td>
+                    <td contenteditable="true" class="editable">0</td>
+                    <td contenteditable="true" class="editable">0</td>
+                    <td contenteditable="true" class="editable">0</td>
+                    <td contenteditable="true" class="editable">0</td>
+                    <td contenteditable="true" class="editable">0</td>
+                    <td contenteditable="true" class="editable">0</td>
+                    <td contenteditable="true" class="editable">0</td>
+                </tr>
+                <tr>
+                    <td>Tarjeta Request</td>
+                    <td contenteditable="true" class="editable">0</td>
+                    <td contenteditable="true" class="editable">0</td>
+                    <td contenteditable="true" class="editable">0</td>
+                    <td contenteditable="true" class="editable">0</td>
+                    <td contenteditable="true" class="editable">0</td>
+                    <td contenteditable="true" class="editable">0</td>
+                    <td contenteditable="true" class="editable">0</td>
+                    <td contenteditable="true" class="editable">0</td>
+                    <td contenteditable="true" class="editable">0</td>
+                    <td contenteditable="true" class="editable">0</td>
+                    <td contenteditable="true" class="editable">0</td>
+                    <td contenteditable="true" class="editable">0</td>
+                </tr>
+                <tr>
+                    <td>Prepaga Transaccion Request</td>
+                    <td contenteditable="true" class="editable">0</td>
+                    <td contenteditable="true" class="editable">0</td>
+                    <td contenteditable="true" class="editable">0</td>
+                    <td contenteditable="true" class="editable">0</td>
+                    <td contenteditable="true" class="editable">0</td>
+                    <td contenteditable="true" class="editable">0</td>
+                    <td contenteditable="true" class="editable">0</td>
+                    <td contenteditable="true" class="editable">0</td>
+                    <td contenteditable="true" class="editable">0</td>
+                    <td contenteditable="true" class="editable">0</td>
+                    <td contenteditable="true" class="editable">0</td>
+                    <td contenteditable="true" class="editable">0</td>
+                </tr>
+                <tr>
+                    <td>Tarjeta Habilitar Request</td>
+                    <td contenteditable="true" class="editable">0</td>
+                    <td contenteditable="true" class="editable">0</td>
+                    <td contenteditable="true" class="editable">0</td>
+                    <td contenteditable="true" class="editable">0</td>
+                    <td contenteditable="true" class="editable">0</td>
+                    <td contenteditable="true" class="editable">0</td>
+                    <td contenteditable="true" class="editable">0</td>
+                    <td contenteditable="true" class="editable">0</td>
+                    <td contenteditable="true" class="editable">0</td>
+                    <td contenteditable="true" class="editable">0</td>
+                    <td contenteditable="true" class="editable">0</td>
+                    <td contenteditable="true" class="editable">0</td>
+                </tr>
+                <tr>
+                    <td>Tarjeta Cambiar Request</td>
+                    <td contenteditable="true" class="editable">0</td>
+                    <td contenteditable="true" class="editable">0</td>
+                    <td contenteditable="true" class="editable">0</td>
+                    <td contenteditable="true" class="editable">0</td>
+                    <td contenteditable="true" class="editable">0</td>
+                    <td contenteditable="true" class="editable">0</td>
+                    <td contenteditable="true" class="editable">0</td>
+                    <td contenteditable="true" class="editable">0</td>
+                    <td contenteditable="true" class="editable">0</td>
+                    <td contenteditable="true" class="editable">0</td>
+                    <td contenteditable="true" class="editable">0</td>
+                    <td contenteditable="true" class="editable">0</td>
+                </tr>
+                <tr>
+                    <td>Tarjeta Bloquear Request</td>
+                    <td contenteditable="true" class="editable">0</td>
+                    <td contenteditable="true" class="editable">0</td>
+                    <td contenteditable="true" class="editable">0</td>
+                    <td contenteditable="true" class="editable">0</td>
+                    <td contenteditable="true" class="editable">0</td>
+                    <td contenteditable="true" class="editable">0</td>
+                    <td contenteditable="true" class="editable">0</td>
+                    <td contenteditable="true" class="editable">0</td>
+                    <td contenteditable="true" class="editable">0</td>
+                    <td contenteditable="true" class="editable">0</td>
+                    <td contenteditable="true" class="editable">0</td>
+                    <td contenteditable="true" class="editable">0</td>
+                </tr>
+                <tr>
+                    <td>Tarejeta Desbloquear Request</td>
+                    <td contenteditable="true" class="editable">0</td>
+                    <td contenteditable="true" class="editable">0</td>
+                    <td contenteditable="true" class="editable">0</td>
+                    <td contenteditable="true" class="editable">0</td>
+                    <td contenteditable="true" class="editable">0</td>
+                    <td contenteditable="true" class="editable">0</td>
+                    <td contenteditable="true" class="editable">0</td>
+                    <td contenteditable="true" class="editable">0</td>
+                    <td contenteditable="true" class="editable">0</td>
+                    <td contenteditable="true" class="editable">0</td>
+                    <td contenteditable="true" class="editable">0</td>
+                    <td contenteditable="true" class="editable">0</td>
+                </tr>
+                <tr>
+                    <td>Tarjeta Cambiar estado</td>
+                    <td contenteditable="true" class="editable">0</td>
+                    <td contenteditable="true" class="editable">0</td>
+                    <td contenteditable="true" class="editable">0</td>
+                    <td contenteditable="true" class="editable">0</td>
+                    <td contenteditable="true" class="editable">0</td>
+                    <td contenteditable="true" class="editable">0</td>
+                    <td contenteditable="true" class="editable">0</td>
+                    <td contenteditable="true" class="editable">0</td>
+                    <td contenteditable="true" class="editable">0</td>
+                    <td contenteditable="true" class="editable">0</td>
+                    <td contenteditable="true" class="editable">0</td>
+                    <td contenteditable="true" class="editable">0</td>
+                </tr>
+                <tr>
+                    <td>Valo esperado</td>
+                    <td contenteditable="true" class="editable">1000</td>
+                    <td contenteditable="true" class="editable">1000</td>
+                    <td contenteditable="true" class="editable">1000</td>
+                    <td contenteditable="true" class="editable">1000</td>
+                    <td contenteditable="true" class="editable">1000</td>
+                    <td contenteditable="true" class="editable">1000</td>
+                    <td contenteditable="true" class="editable">1000</td>
+                    <td contenteditable="true" class="editable">1000</td>
+                    <td contenteditable="true" class="editable">1000</td>
+                    <td contenteditable="true" class="editable">1000</td>
+                    <td contenteditable="true" class="editable">1000</td>
+                    <td contenteditable="true" class="editable">1000</td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
+
+    <h2>Gráfico de Evolución de APIs</h2>
+    <div class="gauge-container">
+        <canvas id="apisChart"></canvas>
+    </div>
+
+    <h2>Tareas Programadas</h2>
+    <div class="calendar-container">
+        <div class="calendar-header">
+            <button id="prevMonth">&lt;</button>
+            <h3 id="currentMonth">Mes Año</h3>
+            <button id="nextMonth">&gt;</button>
+        </div>
+        <div class="calendar-grid">
+            <div class="calendar-days">
+                <div>Dom</div>
+                <div>Lun</div>
+                <div>Mar</div>
+                <div>Mié</div>
+                <div>Jue</div>
+                <div>Vie</div>
+                <div>Sáb</div>
+            </div>
+            <div id="calendarDates" class="calendar-dates"></div>
+        </div>
+    </div>
+
+    <!-- Modal para agregar/editar tareas -->
+    <div id="taskModal" class="modal">
+        <div class="modal-content">
+            <span class="close">&times;</span>
+            <h3>Tarea para <span id="selectedDate"></span></h3>
+            <textarea id="taskDescription" placeholder="Descripción de la tarea"></textarea>
+            <button id="saveTask">Guardar</button>
+        </div>
+    </div>
+
+    <h2>Estado de Penalidades</h2>
+    <div class="penalties-container">
+        <div class="penalty-card">
+            <h3>Autorizaciones</h3>
+            <div class="penalty-value" id="authPenalty">99.70%</div>
+            <div class="penalty-status" id="authStatus">
+                <span class="status-indicator"></span>
+                Aplica Penalidad
+            </div>
+        </div>
+        
+        <div class="penalty-card">
+            <h3>Disponibilidad APIs</h3>
+            <div class="penalty-value" id="apisAvailPenalty">100.00%</div>
+            <div class="penalty-status" id="apisAvailStatus">
+                <span class="status-indicator"></span>
+                No Aplica Penalidad
+            </div>
+        </div>
+        
+        <div class="penalty-card">
+            <h3>Tiempo Respuesta APIs</h3>
+            <div class="penalty-value" id="apisTimePenalty">595.92ms</div>
+            <div class="penalty-status" id="apisTimeStatus">
+                <span class="status-indicator"></span>
+                No Aplica Penalidad
+            </div>
+        </div>
+        
+        <div class="penalty-card">
+            <h3>Incidencias</h3>
+            <div class="penalty-value" id="incidentsPenalty">&lt; 1</div>
+            <div class="penalty-status" id="incidentsStatus">
+                <span class="status-indicator"></span>
+                No Aplica Penalidad
+            </div>
+        </div>
+    </div>
+
+    <h2>Incidencias y Tiempos de Respuesta</h2>
+    <div class="table-container">
+        <table id="incidentsTable">
+            <thead>
+                <tr>
+                    <th>State</th>
+                    <th>Tipo</th>
+                    <th>Description</th>
+                    <th>Prioridad</th>
+                    <th>Aplica</th>
+                    <th>Date Creation</th>
+                    <th>Response Date</th>
+                    <th>Solution Time</th>
+                    <th>Response</th>
+                    <th>Solution</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <td contenteditable="true" class="editable">Closed</td>
+                    <td contenteditable="true" class="editable">REQ1001411</td>
+                    <td contenteditable="true" class="editable">Cambio Parametria ADELANTO EN DOLARES - PE</td>
+                    <td contenteditable="true" class="editable">B</td>
+                    <td contenteditable="true" class="editable">S</td>
+                    <td contenteditable="true" class="editable">23/5/2024 13:39</td>
+                    <td contenteditable="true" class="editable">23/5/2024 12:42:00 PM</td>
+                    <td contenteditable="true" class="editable">23/5/2024 15:58:00 PM</td>
+                    <td contenteditable="true" class="editable">0.00</td>
+                    <td contenteditable="true" class="editable">0.00</td>
+                </tr>
+                <tr>
+                    <td contenteditable="true" class="editable">Closed</td>
+                    <td contenteditable="true" class="editable">REQ1001281</td>
+                    <td contenteditable="true" class="editable">Desbloquear Turquia de Comercios Prohibidos</td>
+                    <td contenteditable="true" class="editable">B</td>
+                    <td contenteditable="true" class="editable">S</td>
+                    <td contenteditable="true" class="editable">9/17/2024 16:04</td>
+                    <td contenteditable="true" class="editable">9/17/2024 16:22</td>
+                    <td contenteditable="true" class="editable">9/17/2024 18:50</td>
+                    <td contenteditable="true" class="editable">0.00</td>
+                    <td contenteditable="true" class="editable">0.00</td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
+
+    <h2>Novedades y Próximos Avances</h2>
+    <div class="table-container">
+        <table id="noveltiesTable">
+            <thead>
+                <tr>
+                    <th>Fecha</th>
+                    <th>Descripción</th>
+                    <th>Punto de Bloqueo</th>
+                    <th>Fecha de Entrega</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <td contenteditable="true" class="editable"></td>
+                    <td contenteditable="true" class="editable"></td>
+                    <td contenteditable="true" class="editable"></td>
+                    <td contenteditable="true" class="editable"></td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
+</div>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/gauge.js/1.3.7/gauge.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+<script>
+    const initialData = [
+    ["Autorizaciones", 23451, 70, 99.70, 99.83, -0.13],
+    ["Disponibilidad APIs", 43200, 0, 100.00, 99.83, 0.17],
+    ["Tiempos de respuesta APIs", 27619225.57, 46347, 595.92, 1000, 404.08],
+    ["Procesadas Chile", 18431, 43, 99.77, 99.83, -0.06],
+    ["Procesadas Perú", 5090, 27, 99.47, 99.83, -0.36],
+    ["Disponibilidad Mastercard", 43200, 0, 100.00, 99.83, 0.17],
+    ["Disponibilidad Mambu", 36500, 3495, 90.42, 99.83, -9.41],
+    ["Disponibilidad Global 66", 43200, 0, 100.00, 99.83, 0.17]
+];
+
+function createGauge(elementId, value, title) {
+    const target = document.getElementById(elementId);
+    const gauge = new Gauge(target).setOptions({
+        angle: 0,
+        lineWidth: 0.44,
+        radiusScale: 1,
+        pointer: {
+            length: 0.6,
+            strokeWidth: 0.035,
+            color: '#000000'
+        },
+        staticLabels: {
+            font: "10px sans-serif",
+            labels: title === "Tiempos de respuesta APIs" ? [0, 250, 500, 750, 1000] : [0, 25, 50, 75, 100],
+            color: "#000000",
+            fractionDigits: 0
+        },
+        staticZones: [
+            {strokeStyle: "#FF0000", min: 0, max: title === "Tiempos de respuesta APIs" ? 250 : 25},
+            {strokeStyle: "#FFA500", min: title === "Tiempos de respuesta APIs" ? 250 : 25, max: title === "Tiempos de respuesta APIs" ? 500 : 50},
+            {strokeStyle: "#90EE90", min: title === "Tiempos de respuesta APIs" ? 500 : 50, max: title === "Tiempos de respuesta APIs" ? 750 : 75},
+            {strokeStyle: "#7FFF00", min: title === "Tiempos de respuesta APIs" ? 750 : 75, max: title === "Tiempos de respuesta APIs" ? 1000 : 100}
+        ],
+        limitMax: true,
+        limitMin: true,
+        highDpiSupport: true
+    });
+    gauge.maxValue = title === "Tiempos de respuesta APIs" ? 1000 : 100;
+    gauge.setMinValue(0);
+    gauge.set(value);
+    return gauge;
+}
+
+function calculateValues(titulo, valor1, valor2) {
+    if (titulo === "Tiempos de respuesta APIs") {
+        // Cálculo simple en milisegundos
+        const valorAlcanzado = valor2 === 0 ? 0 : valor1 / valor2;
+        const valorEsperado = 1000; // valor esperado en milisegundos
+        const diferencia = valorAlcanzado - valorEsperado;
+        return [valorAlcanzado, valorEsperado, diferencia];
+    } else {
+        // Para otros casos, mantener el cálculo en porcentaje
+        const valorAlcanzado = valor2 === 0 ? 0 : (valor1 / valor2) * 100;
+        const valorEsperado = 99.83;
+        const diferencia = valorAlcanzado - valorEsperado;
+        return [valorAlcanzado, valorEsperado, diferencia];
+    }
+}
+
+function updateTable(data) {
+    const tbody = document.querySelector('#dataTable tbody');
+    tbody.innerHTML = '';
+    data.forEach((row, rowIndex) => {
+        const tr = document.createElement('tr');
+        if (row[3] < row[4]) {
+            tr.classList.add(row[3] < row[4] * 0.9 ? 'danger' : 'warning');
+        }
+
+        row.forEach((cell, cellIndex) => {
+            const td = document.createElement('td');
+            if (cellIndex === 1 || cellIndex === 2) {
+                td.contentEditable = true;
+                td.classList.add('editable');
+                td.dataset.row = rowIndex;
+                td.dataset.col = cellIndex;
+            } else if (cellIndex === 3 || cellIndex === 4 || cellIndex === 5) {
+                td.classList.add('percentage');
+            }
+            td.textContent = typeof cell === 'number' ? cell.toFixed(2) : cell;
+            tr.appendChild(td);
+        });
+        tbody.appendChild(tr);
+    });
+    updateGauges(data);
+    updatePenaltyCards(data);
+}
+
+function updateGauges(data) {
+    const gaugesDiv = document.getElementById('gauges');
+    gaugesDiv.innerHTML = '';
+
+    data.forEach((row, index) => {
+        const gaugeDiv = document.createElement('div');
+        gaugeDiv.className = 'gauge';
+        const canvas = document.createElement('canvas');
+        canvas.id = `gauge${index}`;
+        const title = document.createElement('h3');
+        title.textContent = row[0];
+        gaugeDiv.appendChild(title);
+        gaugeDiv.appendChild(canvas);
+        const percentage = document.createElement('div');
+        percentage.textContent = row[3].toFixed(2) + '%';
+        gaugeDiv.appendChild(percentage);
+        gaugesDiv.appendChild(gaugeDiv);
+
+        createGauge(`gauge${index}`, row[3], row[0]);
+    });
+}
+
+document.querySelector('#dataTable').addEventListener('blur', function(e) {
+    if (e.target.classList.contains('editable')) {
+        const row = e.target.dataset.row;
+        const col = e.target.dataset.col;
+        const newValue = parseFloat(e.target.textContent);
+
+        if (!isNaN(newValue)) {
+            initialData[row][col] = newValue;
+            const [valorAlcanzado, diferencia] = calculateValues(
+                initialData[row][1],
+                initialData[row][2]
+            );
+            initialData[row][3] = valorAlcanzado;
+            initialData[row][5] = diferencia;
+            updateTable(initialData);
+        }
+    }
+}, true);
+
+// Initial load
+updateTable(initialData);
+
+// Processed Table
+function updateProcessedTable() {
+    const tbody = document.querySelector('#processedTable tbody');
+    const rows = tbody.querySelectorAll('tr');
+
+    rows.forEach(row => {
+        const cells = row.querySelectorAll('td');
+        const approved = parseFloat(cells[1].textContent);
+        const rejected = parseFloat(cells[2].textContent);
+        const canceled = parseFloat(cells[3].textContent);
+        const total = approved + rejected + canceled;
+        const approvedPercentage = (approved / total) * 100;
+        const rejectedPercentage = (rejected / total) * 100;
+        const canceledPercentage = (canceled / total) * 100;
+
+        cells[4].textContent = total.toFixed(2);
+        cells[5].textContent = approvedPercentage.toFixed(2);
+        cells[6].textContent = rejectedPercentage.toFixed(2);
+        cells[7].textContent = canceledPercentage.toFixed(2);
+    });
+
+    updateProcessedGauges();
+}
+
+function updateProcessedGauges() {
+    const gaugesDiv = document.getElementById('processedGauges');
+    gaugesDiv.innerHTML = '';
+
+    const rows = document.querySelectorAll('#processedTable tbody tr');
+    rows.forEach((row, index) => {
+        const cells = row.querySelectorAll('td');
+        const approvedPercentage = parseFloat(cells[5].textContent);
+        const rejectedPercentage = parseFloat(cells[6].textContent);
+        const canceledPercentage = parseFloat(cells[7].textContent);
+
+        const gaugeDiv = document.createElement('div');
+        gaugeDiv.className = 'gauge';
+        const canvas = document.createElement('canvas');
+        canvas.id = `processedGauge${index}`;
+        const title = document.createElement('h3');
+        title.textContent = cells[0].textContent;
+        gaugeDiv.appendChild(title);
+        gaugeDiv.appendChild(canvas);
+        gaugesDiv.appendChild(gaugeDiv);
+
+        createProcessedGauge(`processedGauge${index}`, approvedPercentage, rejectedPercentage, canceledPercentage);
+    });
+}
+
+function createProcessedGauge(elementId, approved, rejected, canceled) {
+    const ctx = document.getElementById(elementId).getContext('2d');
+    new Chart(ctx, {
+        type: 'doughnut',
+        data: {
+            labels: ['Aprobadas', 'Rechazadas', 'Anuladas'],
+            datasets: [{
+                data: [approved, rejected, canceled],
+                backgroundColor: ['#008000', '#FFA500', '#FF0000']
+            }]
+        },
+        options: {
+            responsive: true,
+            plugins: {
+                legend: {
+                    position: 'top',
+                },
+                title: {
+                    display: true,
+                    text: 'Porcentajes de Procesadas'
+                }
+            }
+        }
+    });
+}
+
+document.querySelector('#processedTable').addEventListener('blur', function(e) {
+    if (e.target.classList.contains('editable')) {
+        updateProcessedTable();
+    }
+}, true);
+
+// Initial load for processed table
+updateProcessedTable();
+
+// Evolution Table
+function updateEvolutionTable() {
+    const tbody = document.querySelector('#evolutionTable tbody');
+    const rows = tbody.querySelectorAll('tr');
+    const chileData = [];
+    const peruData = [];
+    const totalData = [];
+    const labels = ['Enero', 'Febrero', 'Marzo', 'Abril', 'Mayo', 'Junio', 'Julio', 'Agosto', 'Septiembre', 'Octubre', 'Noviembre', 'Diciembre'];
+
+    // Obtener datos de Chile y Perú
+    for (let i = 0; i < rows.length - 1; i++) {
+        const cells = rows[i].querySelectorAll('td');
+        const country = cells[0].textContent;
+        const data = [];
+        
+        for (let j = 1; j < cells.length; j++) {
+            const value = parseFloat(cells[j].textContent) || 0;
+            data.push(value);
+            
+            // Actualizar la fila de totales
+            if (country === 'Chile') {
+                chileData.push(value);
+            } else if (country === 'Perú') {
+                peruData.push(value);
+            }
+        }
+    }
+
+    // Calcular y actualizar totales
+    const totalRow = rows[rows.length - 1];
+    const totalCells = totalRow.querySelectorAll('td');
+    for (let i = 1; i < totalCells.length; i++) {
+        const total = (chileData[i-1] || 0) + (peruData[i-1] || 0);
+        totalCells[i].textContent = total.toFixed(2);
+        totalData.push(total);
+    }
+
+    updateEvolutionChart(labels, chileData, peruData, totalData);
+}
+
+// Variable global para mantener la referencia al gráfico
+let evolutionChart = null;
+
+function updateEvolutionChart(labels, chileData, peruData, totalData) {
+    const ctx = document.getElementById('evolutionChart').getContext('2d');
+    
+    // Destruir el gráfico existente si hay uno
+    if (evolutionChart) {
+        evolutionChart.destroy();
+    }
+    
+    // Crear nuevo gráfico solo con Chile y Perú
+    evolutionChart = new Chart(ctx, {
+        type: 'line',
+        data: {
+            labels: labels,
+            datasets: [
+                {
+                    label: 'Chile',
+                    data: chileData,
+                    borderColor: '#008000',
+                    fill: false
+                },
+                {
+                    label: 'Perú',
+                    data: peruData,
+                    borderColor: '#FFA500',
+                    fill: false
+                }
+                // Se eliminó el dataset de Total
+            ]
+        },
+        options: {
+            responsive: true,
+            plugins: {
+                legend: {
+                    position: 'top',
+                },
+                title: {
+                    display: true,
+                    text: 'Evolución de Tarjetas por Mes'
+                }
+            }
+        }
+    });
+}
+
+// Modificar el event listener para que funcione con células editables
+document.querySelector('#evolutionTable').addEventListener('input', function(e) {
+    if (e.target.classList.contains('editable')) {
+        updateEvolutionTable();
+    }
+}, true);
+
+// Initial load for evolution table
+updateEvolutionTable();
+
+// Agregar evento de pegado para la tabla de evolución
+document.querySelector('#evolutionTable').addEventListener('paste', function(e) {
+    e.preventDefault();
+    
+    // Obtener los datos del portapapeles
+    const clipboardData = e.clipboardData.getData('text');
+    
+    // Convertir los datos pegados en una matriz
+    const rows = clipboardData.split('\n').map(row => 
+        row.split('\t').map(cell => cell.trim())
+    ).filter(row => row.length > 1); // Filtrar filas vacías
+    
+    // Obtener la celda donde se pegó
+    const targetCell = e.target;
+    const targetRow = targetCell.parentElement;
+    const startRowIndex = Array.from(targetRow.parentElement.children).indexOf(targetRow);
+    const startCellIndex = Array.from(targetRow.children).indexOf(targetCell);
+    
+    // Actualizar las celdas con los datos pegados
+    rows.forEach((rowData, rowIndex) => {
+        const currentRow = targetRow.parentElement.children[startRowIndex + rowIndex];
+        if (currentRow) {
+            rowData.forEach((cellData, cellIndex) => {
+                const currentCell = currentRow.children[startCellIndex + cellIndex];
+                if (currentCell && currentCell.classList.contains('editable')) {
+                    currentCell.textContent = cellData;
+                }
+            });
+        }
+    });
+    
+    // Actualizar la tabla y el gráfico
+    updateEvolutionTable();
+});
+
+// Agregar evento de pegado para la tabla de métricas detalladas
+document.querySelector('#dataTable').addEventListener('paste', function(e) {
+    e.preventDefault();
+    
+    // Obtener los datos del portapapeles
+    const clipboardData = e.clipboardData.getData('text');
+    
+    // Convertir los datos pegados en una matriz
+    const rows = clipboardData.split('\n').map(row => 
+        row.split('\t').map(cell => cell.trim())
+    ).filter(row => row.length > 1); // Filtrar filas vacías
+    
+    // Obtener la celda donde se pegó
+    const targetCell = e.target;
+    const targetRow = targetCell.parentElement;
+    const startRowIndex = Array.from(targetRow.parentElement.children).indexOf(targetRow);
+    
+    // Actualizar las celdas con los datos pegados
+    rows.forEach((rowData, rowIndex) => {
+        const row = startRowIndex + rowIndex;
+        if (row < initialData.length) {
+            // Siempre actualizar Valor1 y Valor2 (índices 0 y 1 de rowData)
+            if (rowData[0]) {
+                const newValue1 = parseFloat(rowData[0]);
+                if (!isNaN(newValue1)) {
+                    initialData[row][1] = newValue1;
+                }
+            }
+            if (rowData[1]) {
+                const newValue2 = parseFloat(rowData[1]);
+                if (!isNaN(newValue2)) {
+                    initialData[row][2] = newValue2;
+                }
+            }
+            
+            // Recalcular valores después de actualizar cada fila
+            const [valorAlcanzado, diferencia] = calculateValues(
+                initialData[row][1],
+                initialData[row][2]
+            );
+            initialData[row][3] = valorAlcanzado;
+            initialData[row][5] = diferencia;
+        }
+    });
+    
+    // Actualizar la tabla y los gauges
+    updateTable(initialData);
+});
+
+// APIs Table y Chart
+let apisChart = null;
+
+function updateApisTable() {
+    const tbody = document.querySelector('#apisTable tbody');
+    const rows = tbody.querySelectorAll('tr');
+    const labels = ['Enero', 'Febrero', 'Marzo', 'Abril', 'Mayo', 'Junio', 'Julio', 'Agosto', 'Septiembre', 'Octubre', 'Noviembre', 'Diciembre'];
+    const datasets = [];
+    const colors = [
+        '#008000', '#FFA500', '#FF0000', '#0000FF', '#800080', 
+        '#008080', '#FFD700', '#FF69B4'
+    ];
+
+    // Obtener datos de cada API (excluyendo la última fila que es "Valor esperado")
+    for (let i = 0; i < rows.length - 1; i++) {
+        const cells = rows[i].querySelectorAll('td');
+        const apiName = cells[0].textContent;
+        const data = [];
+        
+        for (let j = 1; j < cells.length; j++) {
+            const value = parseFloat(cells[j].textContent) || 0;
+            data.push(value);
+        }
+
+        datasets.push({
+            label: apiName,
+            data: data,
+            borderColor: colors[i % colors.length],
+            fill: false
+        });
+    }
+
+    updateApisChart(labels, datasets);
+}
+
+function updateApisChart(labels, datasets) {
+    const ctx = document.getElementById('apisChart').getContext('2d');
+    
+    // Destruir el gráfico existente si hay uno
+    if (apisChart) {
+        apisChart.destroy();
+    }
+    
+    // Crear nuevo gráfico
+    apisChart = new Chart(ctx, {
+        type: 'line',
+        data: {
+            labels: labels,
+            datasets: datasets
+        },
+        options: {
+            responsive: true,
+            plugins: {
+                legend: {
+                    position: 'top',
+                },
+                title: {
+                    display: true,
+                    text: 'Evolución de APIs por Mes'
+                }
+            },
+            scales: {
+                y: {
+                    beginAtZero: true
+                }
+            }
+        }
+    });
+}
+
+// Event listener para edición manual
+document.querySelector('#apisTable').addEventListener('input', function(e) {
+    if (e.target.classList.contains('editable')) {
+        updateApisTable();
+    }
+}, true);
+
+// Event listener para pegar datos desde Excel
+document.querySelector('#apisTable').addEventListener('paste', function(e) {
+    e.preventDefault();
+    
+    // Obtener los datos del portapapeles
+    const clipboardData = e.clipboardData.getData('text');
+    
+    // Convertir los datos pegados en una matriz
+    const rows = clipboardData.split('\n').map(row => 
+        row.split('\t').map(cell => cell.trim())
+    ).filter(row => row.length > 1); // Filtrar filas vacías
+    
+    // Obtener la celda donde se pegó
+    const targetCell = e.target;
+    const targetRow = targetCell.parentElement;
+    const startRowIndex = Array.from(targetRow.parentElement.children).indexOf(targetRow);
+    const startCellIndex = Array.from(targetRow.children).indexOf(targetCell);
+    
+    // Actualizar las celdas con los datos pegados
+    rows.forEach((rowData, rowIndex) => {
+        const currentRow = targetRow.parentElement.children[startRowIndex + rowIndex];
+        if (currentRow) {
+            rowData.forEach((cellData, cellIndex) => {
+                const currentCell = currentRow.children[startCellIndex + cellIndex];
+                if (currentCell && currentCell.classList.contains('editable')) {
+                    currentCell.textContent = cellData;
+                }
+            });
+        }
+    });
+    
+    // Actualizar la tabla y el gráfico
+    updateApisTable();
+});
+
+// Carga inicial de la tabla de APIs
+updateApisTable();
+
+// Calendario y Tareas
+let currentDate = new Date();
+let tasks = JSON.parse(localStorage.getItem('calendarTasks')) || {};
+
+function createDateElement(content, dateString) {
+    const div = document.createElement('div');
+    div.className = 'calendar-date';
+    
+    // Crear un div para el número del día
+    const dayNumber = document.createElement('div');
+    dayNumber.className = 'day-number';
+    dayNumber.textContent = content;
+    div.appendChild(dayNumber);
+    
+    // Si hay una tarea, agregar el texto de la tarea
+    if (tasks[dateString]) {
+        const taskPreview = document.createElement('div');
+        taskPreview.className = 'task-preview';
+        // Limitar el texto a 30 caracteres
+        taskPreview.textContent = tasks[dateString].substring(0, 30) + (tasks[dateString].length > 30 ? '...' : '');
+        div.appendChild(taskPreview);
+    }
+    
+    return div;
+}
+
+function updateCalendar() {
+    const year = currentDate.getFullYear();
+    const month = currentDate.getMonth();
+    
+    document.getElementById('currentMonth').textContent = 
+        new Date(year, month).toLocaleDateString('es-ES', { month: 'long', year: 'numeric' });
+    
+    const firstDay = new Date(year, month, 1);
+    const lastDay = new Date(year, month + 1, 0);
+    const daysInMonth = lastDay.getDate();
+    const startingDay = firstDay.getDay();
+    
+    const calendarDates = document.getElementById('calendarDates');
+    calendarDates.innerHTML = '';
+    
+    // Días vacíos antes del primer día del mes
+    for (let i = 0; i < startingDay; i++) {
+        calendarDates.appendChild(createDateElement('', ''));
+    }
+    
+    // Días del mes
+    for (let i = 1; i <= daysInMonth; i++) {
+        const dateString = `${year}-${(month + 1).toString().padStart(2, '0')}-${i.toString().padStart(2, '0')}`;
+        const dateElement = createDateElement(i, dateString);
+        
+        if (tasks[dateString]) {
+            dateElement.classList.add('has-task');
+            dateElement.title = tasks[dateString];
+        }
+        
+        dateElement.addEventListener('click', () => openTaskModal(dateString));
+        calendarDates.appendChild(dateElement);
+    }
+}
+
+function openTaskModal(date) {
+    const modal = document.getElementById('taskModal');
+    const selectedDate = new Date(date);
+    document.getElementById('selectedDate').textContent = 
+        selectedDate.toLocaleDateString('es-ES', { dateStyle: 'long' });
+    document.getElementById('taskDescription').value = tasks[date] || '';
+    
+    modal.style.display = 'block';
+    
+    // Guardar la fecha seleccionada para usarla al guardar
+    modal.dataset.selectedDate = date;
+}
+
+// Event Listeners
+document.getElementById('prevMonth').addEventListener('click', () => {
+    currentDate.setMonth(currentDate.getMonth() - 1);
+    updateCalendar();
+});
+
+document.getElementById('nextMonth').addEventListener('click', () => {
+    currentDate.setMonth(currentDate.getMonth() + 1);
+    updateCalendar();
+});
+
+document.querySelector('.close').addEventListener('click', () => {
+    document.getElementById('taskModal').style.display = 'none';
+});
+
+document.getElementById('saveTask').addEventListener('click', () => {
+    const modal = document.getElementById('taskModal');
+    const date = modal.dataset.selectedDate;
+    const description = document.getElementById('taskDescription').value;
+    
+    if (description.trim()) {
+        tasks[date] = description;
+    } else {
+        delete tasks[date];
+    }
+    
+    localStorage.setItem('calendarTasks', JSON.stringify(tasks));
+    modal.style.display = 'none';
+    updateCalendar();
+});
+
+// Inicializar calendario
+updateCalendar();
+
+function updatePenaltyCards(data) {
+    // Función auxiliar para actualizar valor con animación
+    function updateValueWithAnimation(elementId, newValue) {
+        const element = document.getElementById(elementId);
+        element.classList.add('updated');
+        element.textContent = newValue;
+        setTimeout(() => element.classList.remove('updated'), 500);
+    }
+
+    // Autorizaciones
+    const authValue = data[0][3];
+    updateValueWithAnimation('authPenalty', authValue.toFixed(2) + '%');
+    const authStatus = document.getElementById('authStatus');
+    if (authValue >= 99.83) {
+        authStatus.className = 'penalty-status success';
+        authStatus.innerHTML = '<span class="status-indicator"></span>No Aplica Penalidad';
+    } else {
+        authStatus.className = 'penalty-status danger';
+        authStatus.innerHTML = '<span class="status-indicator"></span>Aplica Penalidad';
+    }
+
+    // Disponibilidad APIs
+    const apisValue = data[1][3];
+    updateValueWithAnimation('apisAvailPenalty', apisValue.toFixed(2) + '%');
+    const apisStatus = document.getElementById('apisAvailStatus');
+    if (apisValue >= 99.83) {
+        apisStatus.className = 'penalty-status success';
+        apisStatus.innerHTML = '<span class="status-indicator"></span>No Aplica Penalidad';
+    } else {
+        apisStatus.className = 'penalty-status danger';
+        apisStatus.innerHTML = '<span class="status-indicator"></span>Aplica Penalidad';
+    }
+
+    // Tiempo de respuesta APIs
+    const timeValue = data[2][3];
+    updateValueWithAnimation('apisTimePenalty', timeValue.toFixed(2) + 'ms');
+    const timeStatus = document.getElementById('apisTimeStatus');
+    if (timeValue <= 1000) {
+        timeStatus.className = 'penalty-status success';
+        timeStatus.innerHTML = '<span class="status-indicator"></span>No Aplica Penalidad';
+    } else {
+        timeStatus.className = 'penalty-status danger';
+        timeStatus.innerHTML = '<span class="status-indicator"></span>Aplica Penalidad';
+    }
+
+    // Incidencias (valor fijo)
+    const incidentsStatus = document.getElementById('incidentsStatus');
+    incidentsStatus.className = 'penalty-status success';
+    incidentsStatus.innerHTML = '<span class="status-indicator"></span>No Aplica Penalidad';
+}
+
+// Función para manejar el pegado de datos en la tabla de incidencias
+document.querySelector('#incidentsTable tbody').addEventListener('paste', function(e) {
+    if (!e.target.classList.contains('editable')) return;
+    
+    e.preventDefault();
+    let paste = e.clipboardData.getData('text');
+    let rows = paste.split('\n');
+    
+    // Si solo hay una fila y una celda, pegar normalmente
+    if (rows.length === 1 && !rows[0].includes('\t')) {
+        document.execCommand('insertText', false, paste);
+        return;
+    }
+    
+    let startTd = e.target;
+    let startTr = startTd.parentElement;
+    let startIndex = Array.from(startTr.children).indexOf(startTd);
+    
+    rows.forEach((row, i) => {
+        if (row.trim() === '') return;
+        
+        let currentTr = startTr;
+        if (i > 0) {
+            currentTr = startTr.nextElementSibling;
+            if (!currentTr) {
+                currentTr = document.createElement('tr');
+                for (let j = 0; j < startTr.children.length; j++) {
+                    let td = document.createElement('td');
+                    td.contentEditable = true;
+                    td.className = 'editable';
+                    currentTr.appendChild(td);
+                }
+                startTr.parentElement.appendChild(currentTr);
+            }
+            startTr = currentTr;
+        }
+        
+        let cells = row.split('\t');
+        cells.forEach((cell, j) => {
+            let currentTd = currentTr.children[startIndex + j];
+            if (currentTd) {
+                currentTd.textContent = cell.trim();
+            }
+        });
+    });
+});
+
+// Función para manejar el pegado de datos en la tabla de novedades
+document.querySelector('#noveltiesTable tbody').addEventListener('paste', function(e) {
+    if (!e.target.classList.contains('editable')) return;
+    
+    e.preventDefault();
+    let paste = e.clipboardData.getData('text');
+    let rows = paste.split('\n');
+    
+    // Si solo hay una fila y una celda, pegar normalmente
+    if (rows.length === 1 && !rows[0].includes('\t')) {
+        document.execCommand('insertText', false, paste);
+        return;
+    }
+    
+    let startTd = e.target;
+    let startTr = startTd.parentElement;
+    let startIndex = Array.from(startTr.children).indexOf(startTd);
+    
+    rows.forEach((row, i) => {
+        if (row.trim() === '') return;
+        
+        let currentTr = startTr;
+        if (i > 0) {
+            currentTr = startTr.nextElementSibling;
+            if (!currentTr) {
+                currentTr = document.createElement('tr');
+                for (let j = 0; j < 4; j++) { // 4 columnas en esta tabla
+                    let td = document.createElement('td');
+                    td.contentEditable = true;
+                    td.className = 'editable';
+                    currentTr.appendChild(td);
+                }
+                startTr.parentElement.appendChild(currentTr);
+            }
+            startTr = currentTr;
+        }
+        
+        let cells = row.split('\t');
+        cells.forEach((cell, j) => {
+            let currentTd = currentTr.children[startIndex + j];
+            if (currentTd) {
+                currentTd.textContent = cell.trim();
+            }
+        });
+    });
+});
+
+document.getElementById('exportButton').addEventListener('click', function() {
+    // Obtener la fecha actual formateada
+    const currentDate = new Date().toLocaleDateString('es-ES', {
+        day: '2-digit',
+        month: 'long',
+        year: 'numeric'
+    });
+
+    // Crear el contenido HTML del reporte
+    const reportContent = `
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <title>Reporte Mensual Global - ${currentDate}</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            line-height: 1.6;
+            margin: 0;
+            padding: 20px;
+            color: #2d3436;
+        }
+        .report-header {
+            text-align: center;
+            margin-bottom: 40px;
+            background: linear-gradient(145deg, #0984e3, #00b894);
+            color: white;
+            padding: 20px;
+            border-radius: 10px;
+        }
+        .report-date {
+            font-size: 1.2em;
+            color: #dfe6e9;
+        }
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin: 20px 0;
+            background: white;
+        }
+        th, td {
+            padding: 12px;
+            border: 1px solid #dfe6e9;
+            text-align: left;
+        }
+        th {
+            background: #f8f9fa;
+            font-weight: bold;
+        }
+        .section {
+            margin: 40px 0;
+            padding: 20px;
+            background: white;
+            border-radius: 10px;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+        }
+        h2 {
+            color: #0984e3;
+            border-bottom: 2px solid #dfe6e9;
+            padding-bottom: 10px;
+        }
+        .metrics-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 20px;
+            margin: 20px 0;
+        }
+        .metric-card {
+            background: #f8f9fa;
+            padding: 20px;
+            border-radius: 8px;
+            text-align: center;
+        }
+        .metric-value {
+            font-size: 24px;
+            font-weight: bold;
+            color: #0984e3;
+        }
+    </style>
+</head>
+<body>
+    <div class="report-header">
+        <h1>Reporte Mensual Global</h1>
+        <div class="report-date">Fecha: ${currentDate}</div>
+    </div>
+
+    <div class="section">
+        <h2>Métricas Principales</h2>
+        <div class="metrics-grid">
+            ${generateMetricsHTML()}
+        </div>
+    </div>
+
+    <div class="section">
+        <h2>Transacciones por País</h2>
+        ${document.getElementById('processedTable').outerHTML}
+    </div>
+
+    <div class="section">
+        <h2>Incidencias y Tiempos de Respuesta</h2>
+        ${document.getElementById('incidentsTable').outerHTML}
+    </div>
+
+    <div class="section">
+        <h2>Novedades y Próximos Avances</h2>
+        ${document.getElementById('noveltiesTable').outerHTML}
+    </div>
+</body>
+</html>
+    `;
+
+    // Función para generar el HTML de las métricas
+    function generateMetricsHTML() {
+        const metrics = initialData.map(row => `
+            <div class="metric-card">
+                <h3>${row[0]}</h3>
+                <div class="metric-value">${row[3].toFixed(2)}%</div>
+                <div class="metric-target">Meta: ${row[4]}%</div>
+            </div>
+        `).join('');
+        return metrics;
+    }
+
+    // Crear el blob y descargar el archivo
+    const blob = new Blob([reportContent], { type: 'text/html' });
+    const url = window.URL.createObjectURL(blob);
+    const a = document.createElement('a');
+    a.href = url;
+    a.download = `Reporte_Global_${currentDate.replace(/ /g, '_')}.html`;
+    document.body.appendChild(a);
+    a.click();
+    window.URL.revokeObjectURL(url);
+    document.body.removeChild(a);
+});
+
+</script>
+</body>

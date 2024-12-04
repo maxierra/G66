@@ -1,0 +1,76 @@
+<div class="container-fluid">
+    <div class="card">
+        <div class="card-header bg-primary text-white">
+            <h5 class="mb-0"><i class="fas fa-upload me-2"></i>Carga de Datos</h5>
+        </div>
+        <div class="card-body">
+            <div class="mb-3">
+                <label for="file" class="form-label">Seleccione el archivo Excel a cargar:</label>
+                <input type="file" class="form-control" id="file" name="file" accept=".xlsx,.xls">
+            </div>
+            <button type="button" onclick="uploadFile()" class="btn btn-primary">
+                <i class="fas fa-upload me-2"></i>Cargar Archivo
+            </button>
+        </div>
+    </div>
+</div>
+
+<script>
+    async function uploadFile() {
+        const fileInput = document.getElementById('file');
+        const file = fileInput.files[0];
+        
+        if (!file) {
+            Swal.fire({
+                icon: 'warning',
+                title: 'Atención',
+                text: 'Por favor seleccione un archivo',
+                confirmButtonColor: '#007bff'
+            });
+            return;
+        }
+
+        const formData = new FormData();
+        formData.append('file', file);
+
+        try {
+            // Mostrar loading
+            Swal.fire({
+                title: 'Cargando...',
+                html: 'Por favor espere mientras se procesa el archivo',
+                allowOutsideClick: false,
+                didOpen: () => {
+                    Swal.showLoading();
+                }
+            });
+
+            const response = await fetch('/api/csv-import', {
+                method: 'POST',
+                body: formData
+            });
+
+            const data = await response.json();
+
+            if (data.success) {
+                Swal.fire({
+                    position: 'center',
+                    icon: 'success',
+                    title: 'Archivo importado correctamente',
+                    showConfirmButton: false,
+                    timer: 1500
+                });
+                // Limpiar el input
+                fileInput.value = '';
+            } else {
+                throw new Error(data.error || 'Error al procesar el archivo');
+            }
+        } catch (error) {
+            Swal.fire({
+                icon: 'error',
+                title: 'Error',
+                text: error.message || 'Error al procesar el archivo',
+                confirmButtonColor: '#dc3545'
+            });
+        }
+    }
+</script>
