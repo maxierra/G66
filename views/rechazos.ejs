@@ -47,20 +47,118 @@
         }
 
         .table {
-            width: max-content !important;
-            min-width: 100% !important;
-            margin: 0 !important;
+            width: 100% !important;
+            margin-bottom: 0 !important;
+        }
+
+        .table th, .table td {
+            max-width: 200px !important;
+            white-space: normal !important;
+            overflow: hidden !important;
+            text-overflow: ellipsis !important;
+            padding: 4px 8px !important;
+            vertical-align: middle !important;
+            word-wrap: break-word !important;
         }
 
         .table td {
-            white-space: nowrap !important;
-            padding: 8px 12px !important;
+            font-size: 0.85rem !important;
+            line-height: 1.2 !important;
         }
 
+        .table-responsive {
+            margin: 0 !important;
+            padding: 0 !important;
+            width: 100% !important;
+            overflow-x: auto !important;
+        }
+
+        .table {
+            table-layout: fixed !important;
+            width: 100% !important;
+        }
+
+        /* Specific column widths */
+        .table th:nth-child(1), .table td:nth-child(1) { width: 80px !important; }  /* PROCESADA */
+        .table th:nth-child(2), .table td:nth-child(2) { width: 500px !important; } /* MENSAJE */
+
         .table th {
+            background-color: #0d6efd !important;
+            color: white !important;
+            font-weight: 600 !important;
+            text-transform: uppercase !important;
+            font-size: 0.9rem !important;
+            letter-spacing: 0.5px !important;
+            padding: 15px 12px !important;
+            border: none !important;
+            text-shadow: 1px 1px 1px rgba(0,0,0,0.2) !important;
+            position: sticky !important;
+            top: 0 !important;
+            z-index: 10 !important;
             white-space: nowrap !important;
-            padding: 12px !important;
-            background-color: #f8f9fa;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1) !important;
+        }
+
+        .table th:first-child {
+            border-top-left-radius: 8px !important;
+        }
+
+        .table th:last-child {
+            border-top-right-radius: 8px !important;
+        }
+
+        .table tbody tr:hover {
+            background-color: rgba(13, 110, 253, 0.05) !important;
+            transition: all 0.3s ease !important;
+        }
+
+        .table-striped tbody tr:nth-of-type(odd) {
+            background-color: rgba(13, 110, 253, 0.02) !important;
+        }
+
+        .table tbody td {
+            border: none !important;
+            border-bottom: 1px solid #e9ecef !important;
+            color: #495057 !important;
+            font-size: 0.9rem !important;
+        }
+
+        .table {
+            border-collapse: separate !important;
+            border-spacing: 0 !important;
+            border: 1px solid #e9ecef !important;
+            border-radius: 8px !important;
+            overflow: hidden !important;
+            margin-bottom: 1rem !important;
+        }
+
+        /* Añadir un efecto de brillo sutil a los encabezados */
+        .table thead th::after {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(rgba(255,255,255,0.1), transparent);
+            pointer-events: none;
+        }
+
+        /* Estilos para las filas según ORIGEN_ */
+        #tablaResultados tbody tr.online-row {
+            background-color: #00ff00 !important;
+        }
+        #tablaResultados tbody tr.forzada-row {
+            background-color: #ffff00 !important;
+            cursor: pointer !important;
+        }
+        
+        /* Asegurar que todas las celdas de la fila tengan el mismo color */
+        #tablaResultados tbody tr.online-row td {
+            background-color: #00ff00 !important;
+        }
+        #tablaResultados tbody tr.forzada-row td {
+            background-color: #ffff00 !important;
         }
 
         .controls-container {
@@ -219,69 +317,6 @@
                 width: 100%;
             }
         }
-
-        .table thead th {
-            background: linear-gradient(135deg, #0d6efd, #0a58ca) !important;
-            color: white !important;
-            font-weight: 600 !important;
-            text-transform: uppercase !important;
-            font-size: 0.9rem !important;
-            letter-spacing: 0.5px !important;
-            padding: 15px 12px !important;
-            border: none !important;
-            text-shadow: 1px 1px 1px rgba(0,0,0,0.2) !important;
-            position: sticky !important;
-            top: 0 !important;
-            z-index: 10 !important;
-            white-space: nowrap !important;
-            box-shadow: 0 2px 4px rgba(0,0,0,0.1) !important;
-        }
-
-        .table thead th:first-child {
-            border-top-left-radius: 8px !important;
-        }
-
-        .table thead th:last-child {
-            border-top-right-radius: 8px !important;
-        }
-
-        .table tbody tr:hover {
-            background-color: rgba(13, 110, 253, 0.05) !important;
-            transition: all 0.3s ease !important;
-        }
-
-        .table-striped tbody tr:nth-of-type(odd) {
-            background-color: rgba(13, 110, 253, 0.02) !important;
-        }
-
-        .table tbody td {
-            padding: 12px !important;
-            border: none !important;
-            border-bottom: 1px solid #e9ecef !important;
-            color: #495057 !important;
-            font-size: 0.95rem !important;
-        }
-
-        .table {
-            border-collapse: separate !important;
-            border-spacing: 0 !important;
-            border: 1px solid #e9ecef !important;
-            border-radius: 8px !important;
-            overflow: hidden !important;
-            margin-bottom: 1rem !important;
-        }
-
-        /* Añadir un efecto de brillo sutil a los encabezados */
-        .table thead th::after {
-            content: '';
-            position: absolute;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            background: linear-gradient(rgba(255,255,255,0.1), transparent);
-            pointer-events: none;
-        }
     </style>
     <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
 </head>
@@ -289,9 +324,14 @@
     <div class="container-fluid">
         <div class="card">
             <div class="card-header bg-primary text-white">
-                <h5 class="mb-0">
-                    <i class="fas fa-exclamation-circle me-2"></i>Consulta de Rechazos
-                </h5>
+                <div class="d-flex justify-content-between align-items-center">
+                    <h5 class="mb-0">
+                        <i class="fas fa-exclamation-circle me-2"></i>Consulta de Rechazos
+                    </h5>
+                    <button id="btnCopiarTabla" class="btn btn-secondary" style="display: none;">
+                        <i class="fas fa-copy"></i> Copiar Tabla
+                    </button>
+                </div>
             </div>
             <div class="card-body">
                 <div class="controls-container">
@@ -314,7 +354,7 @@
                 
                 <div class="table-container">
                     <div class="table-responsive">
-                        <table id="tablaDatos" class="table table-striped table-bordered" style="width: max-content !important; min-width: 100% !important;">
+                        <table id="tablaResultados" class="table table-striped table-bordered" style="width: max-content !important; min-width: 100% !important;">
                             <thead>
                                 <tr>
                                     <!-- Las columnas se agregarán dinámicamente -->
@@ -337,74 +377,217 @@
     </div>
 
     <script>
+        // Cargar estados guardados
+        let estadosRevisados = JSON.parse(localStorage.getItem('filasRevisadas') || '{}');
+
+        function toggleEstadoFila(fila, recallid, valorOrigen) {
+            if (!valorOrigen.includes('FORZADA')) return; // Solo procesar filas FORZADA
+            
+            const estaVerde = fila.classList.contains('online-row');
+            
+            // Remover ambas clases
+            fila.classList.remove('online-row', 'forzada-row');
+            
+            if (estaVerde) {
+                // Cambiar a amarillo
+                fila.classList.add('forzada-row');
+                delete estadosRevisados[recallid];
+            } else {
+                // Cambiar a verde
+                fila.classList.add('online-row');
+                estadosRevisados[recallid] = true;
+            }
+            
+            // Guardar estado
+            localStorage.setItem('filasRevisadas', JSON.stringify(estadosRevisados));
+            
+            // Forzar el repintado
+            fila.style.display = 'none';
+            fila.offsetHeight; // Forzar un reflow
+            fila.style.display = '';
+        }
+
+        // Función principal para colorear filas
+        function colorearFilas() {
+            const tabla = document.getElementById('tablaResultados');
+            if (!tabla) return;
+
+            const filas = tabla.getElementsByTagName('tr');
+            for (let i = 1; i < filas.length; i++) {
+                const fila = filas[i];
+                const celdas = fila.getElementsByTagName('td');
+                if (!celdas.length) continue;
+
+                // Buscar índices de columnas
+                const headers = tabla.getElementsByTagName('th');
+                const origenIndex = Array.from(headers).findIndex(th => th.textContent.trim() === 'ORIGEN_');
+                const recallidIndex = Array.from(headers).findIndex(th => th.textContent.trim() === 'RECALLID');
+                
+                if (origenIndex === -1 || recallidIndex === -1) continue;
+
+                const valorOrigen = celdas[origenIndex].textContent.trim();
+                const recallid = celdas[recallidIndex].textContent.trim();
+
+                // Limpiar clases
+                fila.classList.remove('online-row', 'forzada-row');
+
+                // Aplicar color según estado
+                if (estadosRevisados[recallid] || valorOrigen === 'ON-LINE') {
+                    fila.classList.add('online-row');
+                } else if (valorOrigen.includes('FORZADA')) {
+                    fila.classList.add('forzada-row');
+                }
+
+                // Agregar evento de doble clic
+                fila.ondblclick = () => toggleEstadoFila(fila, recallid, valorOrigen);
+            }
+        }
+
         document.addEventListener('DOMContentLoaded', function() {
-            const fechaHoy = new Date().toISOString().split('T')[0];
-            document.getElementById('fechaConsulta').value = fechaHoy;
+            colorearFilas();
+            
+            // Recolorear después de cada búsqueda
+            document.getElementById('btnConsultar').addEventListener('click', function() {
+                setTimeout(colorearFilas, 500);
+            });
+        });
 
-            document.getElementById('btnConsultar').addEventListener('click', async function() {
-                const fecha = document.getElementById('fechaConsulta').value;
-                const vistaCompleta = document.getElementById('vistaCompleta').checked;
-                const loadingOverlay = document.getElementById('loadingOverlay');
-                const tabla = document.getElementById('tablaDatos');
+        // Función para copiar el contenido de la tabla
+        function copiarContenidoTabla() {
+            const tabla = document.querySelector('#tablaResultados tbody');
+            if (!tabla || !tabla.rows.length) {
+                Swal.fire({
+                    icon: 'info',
+                    title: 'No hay datos para copiar',
+                    text: 'Realiza una consulta primero'
+                });
+                return;
+            }
 
-                loadingOverlay.style.display = 'flex';
+            let contenido = '';
+            for (let i = 0; i < tabla.rows.length; i++) {
+                const fila = tabla.rows[i];
+                const textoFila = Array.from(fila.cells)
+                    .map(celda => celda.textContent.trim())
+                    .join('\t');
+                contenido += textoFila + '\n';
+            }
 
-                try {
-                    const response = await fetch(`/api/rechazos/consulta?fecha=${fecha}&vistaCompleta=${vistaCompleta}`);
-                    const data = await response.json();
+            navigator.clipboard.writeText(contenido).then(() => {
+                Swal.fire({
+                    icon: 'success',
+                    title: 'Copiado!',
+                    text: 'El contenido de la tabla ha sido copiado al portapapeles',
+                    toast: true,
+                    position: 'top-end',
+                    showConfirmButton: false,
+                    timer: 3000
+                });
+            }).catch(err => {
+                console.error('Error al copiar:', err);
+                Swal.fire({
+                    icon: 'error',
+                    title: 'Error',
+                    text: 'No se pudo copiar el contenido'
+                });
+            });
+        }
 
-                    if (!response.ok) {
-                        throw new Error(data.error || 'Error al consultar los datos');
-                    }
+        // Agregar evento al botón de copiar
+        document.getElementById('btnCopiarTabla').addEventListener('click', copiarContenidoTabla);
 
-                    if (!data || data.length === 0) {
-                        Swal.fire({
-                            icon: 'info',
-                            title: 'Sin resultados',
-                            text: 'No se encontraron datos para la fecha seleccionada'
-                        });
-                        tabla.querySelector('thead tr').innerHTML = '';
-                        tabla.querySelector('tbody').innerHTML = '';
-                        return;
-                    }
+        document.getElementById('btnConsultar').addEventListener('click', async function() {
+            const fecha = document.getElementById('fechaConsulta').value;
+            const vistaCompleta = document.getElementById('vistaCompleta').checked;
+            const tabla = document.getElementById('tablaResultados');
+            
+            try {
+                const response = await fetch(`/rechazos/consulta?fecha=${fecha}&vistaCompleta=${vistaCompleta}`);
+                if (!response.ok) {
+                    throw new Error(`HTTP error! status: ${response.status}`);
+                }
+                const data = await response.json();
 
-                    const headers = Object.keys(data[0]);
-                    tabla.querySelector('thead tr').innerHTML = headers
-                        .map(header => `<th>${header}</th>`)
-                        .join('');
-
-                    tabla.querySelector('tbody').innerHTML = data
-                        .map(row => `
-                            <tr>
-                                ${headers.map(header => `<td>${row[header] ?? ''}</td>`).join('')}
-                            </tr>
-                        `)
-                        .join('');
-
-                } catch (error) {
-                    console.error('Error:', error);
+                if (data.length === 0) {
                     Swal.fire({
-                        icon: 'error',
-                        title: 'Error',
-                        text: 'Ocurrió un error al consultar los datos: ' + error.message
+                        icon: 'info',
+                        title: 'Sin resultados',
+                        text: 'No se encontraron registros para la fecha seleccionada'
                     });
-                } finally {
-                    loadingOverlay.style.display = 'none';
+                    tabla.querySelector('thead tr').innerHTML = '';
+                    tabla.querySelector('tbody').innerHTML = '';
+                    document.getElementById('btnCopiarTabla').style.display = 'none';
+                    return;
                 }
-            });
 
-            document.getElementById('vistaCompleta').addEventListener('change', function() {
-                const subtitulo = document.getElementById('subtitulo');
-                if (this.checked) {
-                    subtitulo.textContent = 'VISTA COMPLETA PARA USAR EN REPORTE IPM';
-                    subtitulo.classList.remove('infinitus');
-                    subtitulo.classList.add('reporte-ipm');
-                } else {
-                    subtitulo.textContent = 'VISTA REDUCIDA PARA USAR EN INFINITUS';
-                    subtitulo.classList.remove('reporte-ipm');
-                    subtitulo.classList.add('infinitus');
-                }
-            });
+                // Crear encabezados
+                const headers = Object.keys(data[0]);
+                tabla.querySelector('thead tr').innerHTML = headers.map(header => `
+                    <th>${header}</th>
+                `).join('');
+
+                // Crear filas de datos
+                tabla.querySelector('tbody').innerHTML = data.map(row => `
+                    <tr>${headers.map(header => `<td>${row[header] || ''}</td>`).join('')}</tr>
+                `).join('');
+
+                // Mostrar el botón de copiar cuando hay datos
+                document.getElementById('btnCopiarTabla').style.display = 'block';
+
+            } catch (error) {
+                console.error('Error:', error);
+                Swal.fire({
+                    icon: 'error',
+                    title: 'Error',
+                    text: 'Error al consultar los datos'
+                });
+                document.getElementById('btnCopiarTabla').style.display = 'none';
+            }
+        });
+
+        // Agregar botón para reiniciar estados
+        document.addEventListener('DOMContentLoaded', function() {
+            const btnContainer = document.querySelector('.controls-container');
+            const resetBtn = document.createElement('button');
+            resetBtn.className = 'btn btn-warning ms-2';
+            resetBtn.textContent = 'Reiniciar Estados';
+            resetBtn.onclick = function() {
+                Swal.fire({
+                    title: '¿Estás seguro?',
+                    text: "Esto reiniciará el estado de todas las filas revisadas",
+                    icon: 'warning',
+                    showCancelButton: true,
+                    confirmButtonColor: '#3085d6',
+                    cancelButtonColor: '#d33',
+                    confirmButtonText: 'Sí, reiniciar',
+                    cancelButtonText: 'Cancelar'
+                }).then((result) => {
+                    if (result.isConfirmed) {
+                        localStorage.removeItem('filasRevisadas');
+                        estadosRevisados = {};
+                        colorearFilas();
+                        Swal.fire(
+                            '¡Reiniciado!',
+                            'Los estados han sido reiniciados',
+                            'success'
+                        );
+                    }
+                });
+            };
+            btnContainer.appendChild(resetBtn);
+        });
+
+        document.getElementById('vistaCompleta').addEventListener('change', function() {
+            const subtitulo = document.getElementById('subtitulo');
+            if (this.checked) {
+                subtitulo.textContent = 'VISTA COMPLETA PARA USAR EN REPORTE IPM';
+                subtitulo.classList.remove('infinitus');
+                subtitulo.classList.add('reporte-ipm');
+            } else {
+                subtitulo.textContent = 'VISTA REDUCIDA PARA USAR EN INFINITUS';
+                subtitulo.classList.remove('reporte-ipm');
+                subtitulo.classList.add('infinitus');
+            }
         });
     </script>
 </body>

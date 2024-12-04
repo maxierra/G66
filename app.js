@@ -35,6 +35,7 @@ const importRouter = require('./routes/import');
 const csvImportRouter = require('./routes/csv-import');
 const rechazosRouter = require('./routes/rechazos');
 const relacionadosRouter = require('./routes/relacionados');
+const forzadasRouter = require('./routes/forzadas');
 
 // Usar rutas
 app.use('/globales', globalesRouter);
@@ -44,6 +45,8 @@ app.use('/rechazos', rechazosRouter);
 app.use('/api/rechazos', rechazosRouter);
 app.use('/relacionados', relacionadosRouter);
 app.use('/api/relacionados', relacionadosRouter);
+app.use('/forzadas', forzadasRouter);
+app.use('/api/forzadas', forzadasRouter);
 
 // Rutas de vistas
 app.get('/', (req, res) => {

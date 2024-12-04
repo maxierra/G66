@@ -12,8 +12,46 @@ function importExcelToDb(filePath) {
         const sheetName = workbook.SheetNames[0];
         const worksheet = workbook.Sheets[sheetName];
         
+        // Configurar opciones para la conversión a JSON
+        const options = {
+            raw: true,  // Obtener valores raw
+            defval: null  // Valor por defecto para celdas vacías
+        };
+        
         // Convertir a JSON
-        const data = XLSX.utils.sheet_to_json(worksheet);
+        const data = XLSX.utils.sheet_to_json(worksheet, options);
+        
+        // Función para limpiar valores numéricos
+        function cleanNumericValue(value) {
+            if (value === null || value === undefined) return null;
+            
+            try {
+                // Si es un número, convertirlo directamente
+                if (typeof value === 'number') {
+                    return Math.floor(value);
+                }
+                
+                // Si es string, procesar
+                let strValue = String(value).trim();
+                
+                // Remover cualquier caracter que no sea número
+                strValue = strValue.replace(/[^\d]/g, '');
+                
+                // Convertir a número entero
+                const numValue = parseInt(strValue, 10);
+                
+                if (isNaN(numValue)) {
+                    console.log('Warning: Valor no numérico encontrado:', value);
+                    return null;
+                }
+                
+                console.log(`Limpiando valor: ${value} -> ${numValue}`);
+                return numValue;
+            } catch (error) {
+                console.error('Error procesando valor:', value, error);
+                return null;
+            }
+        }
         
         // Preparar la consulta SQL
         const stmt = db.prepare(`INSERT INTO db_globall66 (
@@ -30,6 +68,18 @@ function importExcelToDb(filePath) {
             db.run('BEGIN TRANSACTION');
             
             data.forEach((row) => {
+                // Limpiar y convertir valores antes de la inserción
+                const cleanDE3 = cleanNumericValue(row.DE3);
+                const cleanDE51 = cleanNumericValue(row.DE51);
+                const cleanCTA_INFI = cleanNumericValue(row.CTA_INFI);
+                const cleanAUTOCODI = cleanNumericValue(row.AUTOCODI);
+
+                console.log('Valores limpios a insertar:');
+                console.log('DE3:', row.DE3, '->', cleanDE3);
+                console.log('DE51:', row.DE51, '->', cleanDE51);
+                console.log('CTA_INFI:', row.CTA_INFI, '->', cleanCTA_INFI);
+                console.log('AUTOCODI:', row.AUTOCODI, '->', cleanAUTOCODI);
+
                 stmt.run(
                     row.PROCESADA || null,
                     row.MENSAJE || null,
@@ -44,7 +94,7 @@ function importExcelToDb(filePath) {
                     row.FILENAME || null,
                     row.FILEPROCEFECHA || null,
                     row.ROWINFILE || null,
-                    row.DE3 || null,
+                    cleanDE3,
                     row.DE4 || null,
                     row.DE6 || null,
                     row.DE12 || null,
@@ -54,14 +104,14 @@ function importExcelToDb(filePath) {
                     row.DE43 || null,
                     row.DE48 || null,
                     row.DE49 || null,
-                    row.DE51 || null,
+                    cleanDE51,
                     row.DE63 || null,
                     row.AUTOVISATID || null,
                     row.CUPON || null,
                     row.MOVIMTIPO || null,
-                    row.CTA_INFI || null,
+                    cleanCTA_INFI,
                     row.AUTOID || null,
-                    row.AUTOCODI || null,
+                    cleanAUTOCODI,
                     row.AUTOFECHA || null,
                     row.CONSUAUTOCODI || null,
                     row.CONSUFECHA || null

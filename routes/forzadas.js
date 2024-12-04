@@ -4,39 +4,24 @@ const db = require('../database/db');
 
 // Ruta principal para mostrar la página
 router.get('/', (req, res) => {
-    console.log('Accediendo a la página de relacionados');
-    res.render('relacionados');
+    console.log('Accediendo a la página de forzadas');
+    res.render('forzadas');
 });
 
-// Ruta para consultar relacionados por fecha
+// Ruta para consultar relacionados por fecha con filtros de "FORZADA"
 router.post('/consulta', async (req, res) => {
-    console.log('Recibida petición POST /api/relacionados/consulta');
+    console.log('Recibida petición POST /api/forzadas/consulta');
     console.log('Body recibido:', req.body);
-    const fecha = req.body.fecha;
-    console.log('Fecha recibida:', fecha);
+    let fecha = req.body.fecha;
     
-    // Primero, hagamos una consulta para ver algunos ejemplos de fechas en la base de datos
-    const queryFechas = `
-        SELECT FILEPROCEFECHA 
-        FROM db_globall66 
-        WHERE A_MAMBU = 'SI' AND RELA_OK = 'NO'
-        LIMIT 5
-    `;
-    
-    console.log('Consultando ejemplos de fechas...');
-    
+    // Convertir el formato de fecha de YYYY-MM-DD a YYYY/MM/DD
+    if (fecha) {
+        fecha = fecha.replace(/-/g, '/');
+        console.log('Fecha formateada para búsqueda:', fecha);
+    }
+
     try {
-        // Primero consultamos ejemplos de fechas
-        const fechasEjemplo = await new Promise((resolve, reject) => {
-            db.all(queryFechas, [], (err, rows) => {
-                if (err) reject(err);
-                resolve(rows);
-            });
-        });
-        
-        console.log('Ejemplos de fechas en la DB:', fechasEjemplo);
-        
-        // Ahora hacemos la consulta principal
+        // Consulta principal con filtros específicos
         const query = `
             SELECT 
                 PROCESADA, MENSAJE, FILEPROCEFECHA, DE3, DE4, DE6, DE24,
@@ -45,25 +30,29 @@ router.post('/consulta', async (req, res) => {
                 AUTOIMPOR, ORIGEN_, DIFERENCIA, A_MAMBU, RELA_OK,
                 ONL_OK, STATUSMAMBU
             FROM db_globall66 
-            WHERE A_MAMBU = 'SI'
-            AND RELA_OK = 'NO'
+            WHERE ORIGEN_ LIKE '%FORZADA en cierre lote%'
+            AND RELA_OK = 'SI'
+            AND RESULTMESSAGECOMPLETE LIKE '%StatusCode: 200%'
+            AND FILEPROCEFECHA LIKE ? || '%'
             ORDER BY CAST(DE51 AS INTEGER), DE3, CTA_INFI, AUTOCODI
             LIMIT 100
         `;
 
-        console.log('Ejecutando consulta principal sin filtro de fecha');
+        console.log('Ejecutando consulta principal...');
+        console.log('Query completa:', query);
+        console.log('Parámetros:', [fecha]);
         
         const rows = await new Promise((resolve, reject) => {
-            db.all(query, [], (err, rows) => {
+            db.all(query, [fecha], (err, rows) => {
                 if (err) {
                     console.error('Error en la consulta SQL:', err);
                     reject(err);
                 }
                 console.log('Número de filas obtenidas:', rows ? rows.length : 0);
                 if (rows && rows.length > 0) {
-                    console.log('Primera fila:', rows[0]);
+                    console.log('Primera fila obtenida:', rows[0]);
                 } else {
-                    console.log('No hay datos que cumplan las condiciones A_MAMBU = SI y RELA_OK = NO');
+                    console.warn('No hay datos que cumplan los filtros especificados.');
                 }
                 resolve(rows);
             });

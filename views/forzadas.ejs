@@ -1,6 +1,292 @@
-<div class="card">
-    <div class="card-body">
-        <h1 class="text-center mb-4">Bienvenido a Forzadas</h1>
-        <p class="text-center">Sección de elementos forzados.</p>
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Consulta de Forzadas</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css" rel="stylesheet">
+    <style>
+        body {
+            margin: 0;
+            padding: 0;
+            width: 100vw;
+            overflow-x: hidden;
+        }
+        .container-fluid {
+            padding: 0 !important;
+            margin: 0 !important;
+            width: 100vw !important;
+            max-width: none !important;
+        }
+        .card {
+            border: none;
+            border-radius: 0;
+            margin: 0 !important;
+            width: 100% !important;
+        }
+        .card-body {
+            padding: 0 !important;
+        }
+        .table-container {
+            width: 100% !important;
+            margin: 0 !important;
+            padding: 0 !important;
+            overflow: hidden !important;
+        }
+        .table-responsive {
+            margin: 0 !important;
+            padding: 0 !important;
+            width: 100% !important;
+            overflow-x: auto !important;
+        }
+        .table {
+            width: 100% !important;
+            margin-bottom: 0 !important;
+        }
+        .table th {
+            background-color: #0d6efd !important;
+            color: white !important;
+            white-space: nowrap !important;
+            padding: 8px !important;
+        }
+        .table td {
+            max-width: 200px !important;
+            overflow: hidden !important;
+            text-overflow: ellipsis !important;
+            white-space: nowrap !important;
+            padding: 8px !important;
+            cursor: pointer !important;
+        }
+        /* Columnas con más texto */
+        .table td:nth-child(2) { /* MENSAJE */
+            max-width: 400px !important;
+        }
+        /* Columnas más estrechas */
+        .table td:nth-child(1), /* PROCESADA */
+        .table td:nth-child(3), /* Fechas */
+        .table td:nth-child(4), /* Códigos */
+        .table td:nth-child(5) { /* IDs */
+            max-width: 100px !important;
+        }
+        
+        /* Clase para mostrar texto completo */
+        .table td.show-full-text {
+            white-space: normal !important;
+            word-break: break-all !important;
+            background-color: #f8f9fa !important;
+            max-width: none !important;
+        }
+        .btn-consultar {
+            background-color: #0d6efd !important;
+            border: none !important;
+            color: white !important;
+            padding: 0.5rem 2rem !important;
+            text-transform: uppercase !important;
+            font-weight: bold !important;
+            transition: all 0.3s ease !important;
+            box-shadow: 0 2px 5px rgba(13, 110, 253, 0.3) !important;
+        }
+        .btn-consultar:hover {
+            transform: translateY(-2px) !important;
+            box-shadow: 0 4px 10px rgba(13, 110, 253, 0.4) !important;
+            background-color: #0b5ed7 !important;
+        }
+        .input-fecha {
+            border-radius: 5px !important;
+            border: 2px solid #e0e0e0 !important;
+            padding: 0.5rem !important;
+            transition: all 0.3s ease !important;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.1) !important;
+        }
+        .input-fecha:focus {
+            border-color: #0d6efd !important;
+            box-shadow: 0 0 0 0.2rem rgba(13, 110, 253, 0.25) !important;
+            outline: none !important;
+        }
+        .card-header {
+            background-color: #0d6efd !important;
+            color: white !important;
+            padding: 1rem !important;
+            text-transform: uppercase !important;
+            font-weight: bold !important;
+            text-align: center !important;
+            border-radius: 0 !important;
+        }
+        .form-group {
+            margin-bottom: 1rem !important;
+        }
+        .table-striped tbody tr:nth-of-type(odd) {
+            background-color: rgba(13, 110, 253, 0.05) !important;
+        }
+        .mode-title {
+            font-size: 1.1rem;
+            margin: 0;
+            padding: 0.7rem 1.2rem;
+            white-space: nowrap;
+            text-transform: uppercase;
+            font-weight: 700;
+            letter-spacing: 0.5px;
+            border-radius: 8px;
+            background-color: #0d6efd;
+            color: white;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+            transition: all 0.3s ease;
+            text-shadow: 1px 1px 2px rgba(0,0,0,0.1);
+        }
+        .mode-title:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 4px 8px rgba(0,0,0,0.2);
+        }
+    </style>
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+</head>
+<body>
+    <div class="container-fluid">
+        <div class="card">
+            <div class="card-header">
+                <h5 class="mb-0">Consulta de Forzadas</h5>
+            </div>
+            <div class="card-body">
+                <div class="row p-3">
+                    <div class="col-md-4">
+                        <div class="form-group">
+                            <input type="date" id="fechaConsulta" class="form-control input-fecha">
+                        </div>
+                    </div>
+                    <div class="col-md-4">
+                        <button class="btn btn-consultar" onclick="consultarDatos()">
+                            <i class="fas fa-search me-2"></i>Consultar
+                        </button>
+                    </div>
+                    <div class="col-md-4">
+                        <h3 class="mode-title">Forzadas Ok</h3>
+                    </div>
+                </div>
+                <div class="table-container">
+                    <div class="table-responsive">
+                        <table class="table table-striped">
+                            <thead>
+                                <tr>
+                                    <th>PROCESADA</th>
+                                    <th>MENSAJE</th>
+                                    <th>FILEPROCEFECHA</th>
+                                    <th>DE3</th>
+                                    <th>DE4</th>
+                                    <th>DE6</th>
+                                    <th>DE24</th>
+                                    <th>DE25</th>
+                                    <th>DE38</th>
+                                    <th>DE43</th>
+                                    <th>DE49</th>
+                                    <th>DE51</th>
+                                    <th>DE63</th>
+                                    <th>AUTOVISATID</th>
+                                    <th>CTA_INFI</th>
+                                    <th>AUTOCODI</th>
+                                    <th>AUTOFECHA</th>
+                                    <th>CONSUFECHA</th>
+                                    <th>CONSUMIPOR</th>
+                                    <th>AUTOIMPOR</th>
+                                    <th>ORIGEN_</th>
+                                    <th>DIFERENCIA</th>
+                                    <th>A_MAMBU</th>
+                                    <th>RELA_OK</th>
+                                    <th>ONL_OK</th>
+                                    <th>STATUSMAMBU</th>
+                                </tr>
+                            </thead>
+                            <tbody id="tablaResultados">
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </div>
     </div>
-</div>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            // Agregar evento de doble clic a las celdas de la tabla
+            document.addEventListener('dblclick', function(e) {
+                if (e.target.tagName === 'TD') {
+                    e.target.classList.toggle('show-full-text');
+                }
+            });
+
+            const fechaHoy = new Date().toISOString().split('T')[0];
+            document.getElementById('fechaConsulta').value = fechaHoy;
+        });
+
+        async function consultarDatos() {
+            const fecha = document.getElementById('fechaConsulta').value;
+            try {
+                const response = await fetch('/api/forzadas/consulta', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify({ fecha })
+                });
+
+                if (!response.ok) {
+                    throw new Error('Error en la consulta');
+                }
+
+                const data = await response.json();
+                const tbody = document.getElementById('tablaResultados');
+                tbody.innerHTML = '';
+
+                if (data.length === 0) {
+                    Swal.fire({
+                        icon: 'info',
+                        title: 'Sin resultados',
+                        text: 'No se encontraron registros para la fecha seleccionada'
+                    });
+                    return;
+                }
+
+                data.forEach(row => {
+                    const tr = document.createElement('tr');
+                    tr.innerHTML = `
+                        <td>${row.PROCESADA || ''}</td>
+                        <td>${row.MENSAJE || ''}</td>
+                        <td>${row.FILEPROCEFECHA || ''}</td>
+                        <td>${row.DE3 || ''}</td>
+                        <td>${row.DE4 || ''}</td>
+                        <td>${row.DE6 || ''}</td>
+                        <td>${row.DE24 || ''}</td>
+                        <td>${row.DE25 || ''}</td>
+                        <td>${row.DE38 || ''}</td>
+                        <td>${row.DE43 || ''}</td>
+                        <td>${row.DE49 || ''}</td>
+                        <td>${row.DE51 || ''}</td>
+                        <td>${row.DE63 || ''}</td>
+                        <td>${row.AUTOVISATID || ''}</td>
+                        <td>${row.CTA_INFI || ''}</td>
+                        <td>${row.AUTOCODI || ''}</td>
+                        <td>${row.AUTOFECHA || ''}</td>
+                        <td>${row.CONSUFECHA || ''}</td>
+                        <td>${row.CONSUMIPOR || ''}</td>
+                        <td>${row.AUTOIMPOR || ''}</td>
+                        <td>${row.ORIGEN_ || ''}</td>
+                        <td>${row.DIFERENCIA || ''}</td>
+                        <td>${row.A_MAMBU || ''}</td>
+                        <td>${row.RELA_OK || ''}</td>
+                        <td>${row.ONL_OK || ''}</td>
+                        <td>${row.STATUSMAMBU || ''}</td>
+                    `;
+                    tbody.appendChild(tr);
+                });
+            } catch (error) {
+                console.error('Error:', error);
+                Swal.fire({
+                    icon: 'error',
+                    title: 'Error',
+                    text: 'Error al consultar los datos'
+                });
+            }
+        }
+    </script>
+</body>
+</html>
