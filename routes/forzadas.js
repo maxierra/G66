@@ -8,18 +8,12 @@ router.get('/', (req, res) => {
     res.render('forzadas');
 });
 
-// Ruta para consultar relacionados por fecha con filtros de "FORZADA"
+// Ruta para consultar forzadas por fecha
 router.post('/consulta', async (req, res) => {
-    console.log('Recibida petición POST /api/forzadas/consulta');
+    console.log('Recibida petición POST /forzadas/consulta');
     console.log('Body recibido:', req.body);
     let fecha = req.body.fecha;
     
-    // Convertir el formato de fecha de YYYY-MM-DD a YYYY/MM/DD
-    if (fecha) {
-        fecha = fecha.replace(/-/g, '/');
-        console.log('Fecha formateada para búsqueda:', fecha);
-    }
-
     try {
         // Consulta principal con filtros específicos
         const query = `
@@ -33,36 +27,35 @@ router.post('/consulta', async (req, res) => {
             WHERE ORIGEN_ LIKE '%FORZADA en cierre lote%'
             AND RELA_OK = 'SI'
             AND RESULTMESSAGECOMPLETE LIKE '%StatusCode: 200%'
-            AND FILEPROCEFECHA LIKE ? || '%'
+            ${fecha ? "AND FILEPROCEFECHA LIKE '" + fecha.replace(/-/g, '/') + "%'" : ''}
             ORDER BY CAST(DE51 AS INTEGER), DE3, CTA_INFI, AUTOCODI
             LIMIT 100
         `;
 
-        console.log('Ejecutando consulta principal...');
-        console.log('Query completa:', query);
-        console.log('Parámetros:', [fecha]);
+        console.log('Ejecutando consulta:', query);
         
         const rows = await new Promise((resolve, reject) => {
-            db.all(query, [fecha], (err, rows) => {
+            db.all(query, [], (err, rows) => {
                 if (err) {
                     console.error('Error en la consulta SQL:', err);
                     reject(err);
                 }
                 console.log('Número de filas obtenidas:', rows ? rows.length : 0);
-                if (rows && rows.length > 0) {
-                    console.log('Primera fila obtenida:', rows[0]);
-                } else {
-                    console.warn('No hay datos que cumplan los filtros especificados.');
-                }
                 resolve(rows);
             });
         });
 
-        console.log('Enviando respuesta al cliente');
-        res.json(rows);
+        res.json({
+            success: true,
+            data: rows
+        });
     } catch (error) {
         console.error('Error en la consulta:', error);
-        res.status(500).json({ error: 'Error al consultar los datos', details: error.message });
+        res.status(500).json({
+            success: false,
+            message: 'Error al consultar los datos',
+            error: error.message
+        });
     }
 });
 

@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Consulta de Forzadas</title>
+    <title>Consulta de Relacionados</title>
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/css/bootstrap.min.css" rel="stylesheet">
     <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css" rel="stylesheet">
     <style>
@@ -13,43 +13,51 @@
             width: 100vw;
             overflow-x: hidden;
         }
+
         .container-fluid {
             padding: 0 !important;
             margin: 0 !important;
             width: 100vw !important;
             max-width: none !important;
         }
+
         .card {
             border: none;
             border-radius: 0;
             margin: 0 !important;
             width: 100% !important;
         }
+
         .card-body {
             padding: 0 !important;
         }
+
         .table-container {
             width: 100% !important;
             margin: 0 !important;
             padding: 0 !important;
             overflow: hidden !important;
         }
+
         .table-responsive {
             margin: 0 !important;
             padding: 0 !important;
             width: 100% !important;
             overflow-x: auto !important;
         }
+
         .table {
             width: 100% !important;
             margin-bottom: 0 !important;
         }
+
         .table th {
             background-color: #0d6efd !important;
             color: white !important;
             white-space: nowrap !important;
             padding: 8px !important;
         }
+
         .table td {
             max-width: 200px !important;
             overflow: hidden !important;
@@ -58,10 +66,12 @@
             padding: 8px !important;
             cursor: pointer !important;
         }
+
         /* Columnas con más texto */
         .table td:nth-child(2) { /* MENSAJE */
             max-width: 400px !important;
         }
+
         /* Columnas más estrechas */
         .table td:nth-child(1), /* PROCESADA */
         .table td:nth-child(3), /* Fechas */
@@ -69,7 +79,7 @@
         .table td:nth-child(5) { /* IDs */
             max-width: 100px !important;
         }
-        
+
         /* Clase para mostrar texto completo */
         .table td.show-full-text {
             white-space: normal !important;
@@ -77,6 +87,7 @@
             background-color: #f8f9fa !important;
             max-width: none !important;
         }
+
         .btn-consultar {
             background-color: #0d6efd !important;
             border: none !important;
@@ -87,11 +98,13 @@
             transition: all 0.3s ease !important;
             box-shadow: 0 2px 5px rgba(13, 110, 253, 0.3) !important;
         }
+
         .btn-consultar:hover {
             transform: translateY(-2px) !important;
             box-shadow: 0 4px 10px rgba(13, 110, 253, 0.4) !important;
             background-color: #0b5ed7 !important;
         }
+
         .input-fecha {
             border-radius: 5px !important;
             border: 2px solid #e0e0e0 !important;
@@ -99,49 +112,13 @@
             transition: all 0.3s ease !important;
             box-shadow: 0 2px 5px rgba(0,0,0,0.1) !important;
         }
+
         .input-fecha:focus {
             border-color: #0d6efd !important;
-            box-shadow: 0 2px 10px rgba(13, 110, 253, 0.2) !important;
+            box-shadow: 0 0 0 0.2rem rgba(13, 110, 253, 0.25) !important;
+            outline: none !important;
         }
 
-        /* Estilos para los colores de las celdas */
-        .verde {
-            background-color: #00ff00 !important;
-        }
-
-        .amarillo {
-            background-color: #ffff00 !important;
-        }
-
-        .naranja {
-            background-color: #FF8C00 !important;
-        }
-
-        /* Mantener los colores en hover */
-        .table-striped tbody tr:hover td.verde {
-            background-color: #00ff00 !important;
-        }
-
-        .table-striped tbody tr:hover td.amarillo {
-            background-color: #ffff00 !important;
-        }
-
-        .table-striped tbody tr:hover td.naranja {
-            background-color: #FF8C00 !important;
-        }
-
-        /* Mantener los colores incluso con striped */
-        .table-striped > tbody > tr:nth-of-type(odd) > td.verde {
-            background-color: #00ff00 !important;
-        }
-
-        .table-striped > tbody > tr:nth-of-type(odd) > td.amarillo {
-            background-color: #ffff00 !important;
-        }
-
-        .table-striped > tbody > tr:nth-of-type(odd) > td.naranja {
-            background-color: #FF8C00 !important;
-        }
         .card-header {
             background-color: #0d6efd !important;
             color: white !important;
@@ -151,12 +128,15 @@
             text-align: center !important;
             border-radius: 0 !important;
         }
+
         .form-group {
             margin-bottom: 1rem !important;
         }
+
         .table-striped tbody tr:nth-of-type(odd) {
             background-color: rgba(13, 110, 253, 0.05) !important;
         }
+
         .mode-title {
             font-size: 1.1rem;
             margin: 0;
@@ -172,6 +152,7 @@
             transition: all 0.3s ease;
             text-shadow: 1px 1px 2px rgba(0,0,0,0.1);
         }
+
         .mode-title:hover {
             transform: translateY(-2px);
             box-shadow: 0 4px 8px rgba(0,0,0,0.2);
@@ -183,7 +164,7 @@
     <div class="container-fluid">
         <div class="card">
             <div class="card-header">
-                <h5 class="mb-0">Consulta de Forzadas</h5>
+                <h5 class="mb-0">Consulta de Relacionados</h5>
             </div>
             <div class="card-body">
                 <div class="row p-3">
@@ -193,12 +174,12 @@
                         </div>
                     </div>
                     <div class="col-md-4">
-                        <button class="btn btn-consultar" id="btnConsultar">
+                        <button class="btn btn-consultar" onclick="consultarDatos()">
                             <i class="fas fa-search me-2"></i>Consultar
                         </button>
                     </div>
                     <div class="col-md-4">
-                        <h3 class="mode-title">Forzadas Ok</h3>
+                        <h3 class="mode-title">Relacionadas No Ok</h3>
                     </div>
                 </div>
                 <div class="table-container">
@@ -244,128 +225,75 @@
     </div>
 
     <script>
-        async function consultarDatos() {
+        document.addEventListener('DOMContentLoaded', function() {
+            // Agregar evento de doble clic a las celdas de la tabla
+            document.addEventListener('dblclick', function(e) {
+                if (e.target.tagName === 'TD') {
+                    e.target.classList.toggle('show-full-text');
+                }
+            });
+
+            const fechaHoy = new Date().toISOString().split('T')[0];
+            document.getElementById('fechaConsulta').value = fechaHoy;
+        });
+
+        function consultarDatos() {
             const fecha = document.getElementById('fechaConsulta').value;
-            if (!fecha) {
-                Swal.fire({
-                    icon: 'warning',
-                    title: 'Fecha requerida',
-                    text: 'Por favor, seleccione una fecha para consultar'
-                });
-                return;
-            }
-
-            try {
-                const response = await fetch('/forzadas/consulta', {
-                    method: 'POST',
-                    headers: {
-                        'Content-Type': 'application/json'
-                    },
-                    body: JSON.stringify({ fecha })
-                });
-
-                const result = await response.json();
+            
+            fetch('/api/relacionados/consulta', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify({ fecha: fecha })
+            })
+            .then(response => response.json())
+            .then(data => {
+                const tabla = document.getElementById('tablaResultados');
+                tabla.innerHTML = '';
                 
-                if (!result.success) {
-                    throw new Error(result.message || 'Error al consultar los datos');
-                }
-
-                const datos = result.data;
-                
-                if (datos.length === 0) {
-                    Swal.fire({
-                        icon: 'info',
-                        title: 'Sin resultados',
-                        text: 'No se encontraron datos para la fecha seleccionada'
-                    });
-                    return;
-                }
-
-                const tbody = document.querySelector('tbody');
-                tbody.innerHTML = '';
-
-                // Función para aplicar color a toda la fila
-                const aplicarColor = (elemento, color) => {
-                    elemento.style.backgroundColor = color;
-                    const celdas = elemento.getElementsByTagName('td');
-                    for (let celda of celdas) {
-                        celda.style.backgroundColor = color;
-                    }
-                };
-
-                datos.forEach(row => {
-                    const tr = document.createElement('tr');
-                    const mensaje = row.MENSAJE || '';
-
-                    tr.innerHTML = `
-                        <td>${row.PROCESADA || ''}</td>
-                        <td>${mensaje}</td>
-                        <td>${row.FILEPROCEFECHA || ''}</td>
-                        <td>${row.DE3 || ''}</td>
-                        <td>${row.DE4 || ''}</td>
-                        <td>${row.DE6 || ''}</td>
-                        <td>${row.DE24 || ''}</td>
-                        <td>${row.DE25 || ''}</td>
-                        <td>${row.DE38 || ''}</td>
-                        <td>${row.DE43 || ''}</td>
-                        <td>${row.DE49 || ''}</td>
-                        <td>${row.DE51 || ''}</td>
-                        <td>${row.DE63 || ''}</td>
-                        <td>${row.AUTOVISATID || ''}</td>
-                        <td>${row.CTA_INFI || ''}</td>
-                        <td>${row.AUTOCODI || ''}</td>
-                        <td>${row.AUTOFECHA || ''}</td>
-                        <td>${row.CONSUFECHA || ''}</td>
-                        <td>${row.CONSUMIPOR || ''}</td>
-                        <td>${row.AUTOIMPOR || ''}</td>
-                        <td>${row.ORIGEN_ || ''}</td>
-                        <td>${row.DIFERENCIA || ''}</td>
-                        <td>${row.A_MAMBU || ''}</td>
-                        <td>${row.RELA_OK || ''}</td>
-                        <td>${row.ONL_OK || ''}</td>
-                        <td>${row.STATUSMAMBU || ''}</td>
+                data.forEach(item => {
+                    const row = document.createElement('tr');
+                    row.innerHTML = `
+                        <td>${item.PROCESADA}</td>
+                        <td>${item.MENSAJE}</td>
+                        <td>${item.FILEPROCEFECHA}</td>
+                        <td>${item.DE3}</td>
+                        <td>${item.DE4}</td>
+                        <td>${item.DE6}</td>
+                        <td>${item.DE24}</td>
+                        <td>${item.DE25}</td>
+                        <td>${item.DE38}</td>
+                        <td>${item.DE43}</td>
+                        <td>${item.DE49}</td>
+                        <td>${item.DE51}</td>
+                        <td>${item.DE63}</td>
+                        <td>${item.AUTOVISATID}</td>
+                        <td>${item.CTA_INFI}</td>
+                        <td>${item.AUTOCODI}</td>
+                        <td>${item.AUTOFECHA}</td>
+                        <td>${item.CONSUFECHA}</td>
+                        <td>${item.CONSUMIPOR}</td>
+                        <td>${item.AUTOIMPOR}</td>
+                        <td>${item.ORIGEN_}</td>
+                        <td>${item.DIFERENCIA}</td>
+                        <td>${item.A_MAMBU}</td>
+                        <td>${item.RELA_OK}</td>
+                        <td>${item.ONL_OK}</td>
+                        <td>${item.STATUSMAMBU}</td>
                     `;
-
-                    // Aplicar colores según el mensaje
-                    if (mensaje.startsWith('00-')) {
-                        aplicarColor(tr, '#ffff00'); // amarillo
-                    } else if (mensaje.startsWith('01-')) {
-                        aplicarColor(tr, '#00ff00'); // verde
-                    } else if (mensaje.startsWith('02-')) {
-                        aplicarColor(tr, '#FF8C00'); // naranja
-                    }
-
-                    // Agregar evento de doble clic para cambiar a verde
-                    tr.addEventListener('dblclick', function() {
-                        const currentColor = this.style.backgroundColor;
-                        if (currentColor === 'rgb(255, 255, 0)' || currentColor === '#ffff00' || // amarillo
-                            currentColor === 'rgb(255, 140, 0)' || currentColor === '#FF8C00') { // naranja
-                            aplicarColor(this, '#00ff00'); // cambiar a verde
-                        }
-                    });
-
-                    tbody.appendChild(tr);
+                    tabla.appendChild(row);
                 });
-
-            } catch (error) {
+            })
+            .catch(error => {
                 console.error('Error:', error);
                 Swal.fire({
                     icon: 'error',
                     title: 'Error',
-                    text: error.message || 'Error al consultar los datos'
+                    text: 'Hubo un error al consultar los datos'
                 });
-            }
+            });
         }
-
-        // No cargar datos automáticamente al inicio
-        document.addEventListener('DOMContentLoaded', () => {
-            // Solo inicializar la fecha con la fecha actual
-            const today = new Date().toISOString().split('T')[0];
-            document.getElementById('fechaConsulta').value = today;
-        });
-
-        // Agregar evento al botón de consulta
-        document.getElementById('btnConsultar').addEventListener('click', consultarDatos);
     </script>
 </body>
 </html>

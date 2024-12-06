@@ -12,31 +12,21 @@ router.get('/', (req, res) => {
 router.post('/consulta', async (req, res) => {
     console.log('Recibida petición POST /api/relacionados/consulta');
     console.log('Body recibido:', req.body);
-    const fecha = req.body.fecha;
-    console.log('Fecha recibida:', fecha);
+    let fecha = req.body.fecha;
     
-    // Primero, hagamos una consulta para ver algunos ejemplos de fechas en la base de datos
-    const queryFechas = `
-        SELECT FILEPROCEFECHA 
-        FROM db_globall66 
-        WHERE A_MAMBU = 'SI' AND RELA_OK = 'NO'
-        LIMIT 5
-    `;
-    
-    console.log('Consultando ejemplos de fechas...');
-    
-    try {
-        // Primero consultamos ejemplos de fechas
-        const fechasEjemplo = await new Promise((resolve, reject) => {
-            db.all(queryFechas, [], (err, rows) => {
-                if (err) reject(err);
-                resolve(rows);
-            });
+    // Convertir el formato de fecha de YYYY-MM-DD a YYYY/MM/DD
+    if (fecha) {
+        fecha = fecha.replace(/-/g, '/');
+        console.log('Fecha formateada para búsqueda:', fecha);
+    } else {
+        return res.status(400).json({
+            success: false,
+            message: 'Se requiere una fecha para la consulta'
         });
-        
-        console.log('Ejemplos de fechas en la DB:', fechasEjemplo);
-        
-        // Ahora hacemos la consulta principal
+    }
+
+    try {
+        // Consulta principal con filtro de fecha
         const query = `
             SELECT 
                 PROCESADA, MENSAJE, FILEPROCEFECHA, DE3, DE4, DE6, DE24,
@@ -47,33 +37,37 @@ router.post('/consulta', async (req, res) => {
             FROM db_globall66 
             WHERE A_MAMBU = 'SI'
             AND RELA_OK = 'NO'
+            AND FILEPROCEFECHA LIKE ? || '%'
             ORDER BY CAST(DE51 AS INTEGER), DE3, CTA_INFI, AUTOCODI
             LIMIT 100
         `;
 
-        console.log('Ejecutando consulta principal sin filtro de fecha');
+        console.log('Ejecutando consulta principal...');
+        console.log('Query completa:', query);
+        console.log('Parámetros:', [fecha]);
         
         const rows = await new Promise((resolve, reject) => {
-            db.all(query, [], (err, rows) => {
+            db.all(query, [fecha], (err, rows) => {
                 if (err) {
                     console.error('Error en la consulta SQL:', err);
                     reject(err);
                 }
                 console.log('Número de filas obtenidas:', rows ? rows.length : 0);
-                if (rows && rows.length > 0) {
-                    console.log('Primera fila:', rows[0]);
-                } else {
-                    console.log('No hay datos que cumplan las condiciones A_MAMBU = SI y RELA_OK = NO');
-                }
                 resolve(rows);
             });
         });
 
-        console.log('Enviando respuesta al cliente');
-        res.json(rows);
+        res.json({
+            success: true,
+            data: rows
+        });
     } catch (error) {
         console.error('Error en la consulta:', error);
-        res.status(500).json({ error: 'Error al consultar los datos', details: error.message });
+        res.status(500).json({
+            success: false,
+            message: 'Error al consultar los datos',
+            error: error.message
+        });
     }
 });
 

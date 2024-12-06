@@ -80,6 +80,32 @@
             max-width: 100px !important;
         }
 
+        /* Estilos para los colores de las filas */
+        .table tbody tr.verde {
+            background-color: #00ff00 !important;
+        }
+
+        .table tbody tr.amarillo {
+            background-color: #ffff00 !important;
+        }
+
+        .table tbody tr.naranja {
+            background-color: #FF8C00 !important;
+        }
+
+        /* Mantener los colores en hover */
+        .table tbody tr.verde:hover {
+            background-color: #00ff00 !important;
+        }
+
+        .table tbody tr.amarillo:hover {
+            background-color: #ffff00 !important;
+        }
+
+        .table tbody tr.naranja:hover {
+            background-color: #FF8C00 !important;
+        }
+
         /* Clase para mostrar texto completo */
         .table td.show-full-text {
             white-space: normal !important;
@@ -174,7 +200,7 @@
                         </div>
                     </div>
                     <div class="col-md-4">
-                        <button class="btn btn-consultar" onclick="consultarDatos()">
+                        <button id="btnConsultar" class="btn btn-consultar">
                             <i class="fas fa-search me-2"></i>Consultar
                         </button>
                     </div>
@@ -184,7 +210,7 @@
                 </div>
                 <div class="table-container">
                     <div class="table-responsive">
-                        <table class="table table-striped">
+                        <table id="tablaResultados" class="table table-bordered table-striped">
                             <thead>
                                 <tr>
                                     <th>PROCESADA</th>
@@ -200,11 +226,11 @@
                                     <th>DE49</th>
                                     <th>DE51</th>
                                     <th>DE63</th>
-                                    <th>AUTOVISATID</th>
-                                    <th>CTA_INFI</th>
                                     <th>AUTOCODI</th>
+                                    <th>CTA_INFI</th>
+                                    <th>AUTOVISATID</th>
                                     <th>AUTOFECHA</th>
-                                    <th>CONSUFECHA</th>
+                                    <th>CONSUFEC</th>
                                     <th>CONSUMIPOR</th>
                                     <th>AUTOIMPOR</th>
                                     <th>ORIGEN_</th>
@@ -215,7 +241,7 @@
                                     <th>STATUSMAMBU</th>
                                 </tr>
                             </thead>
-                            <tbody id="tablaResultados">
+                            <tbody>
                             </tbody>
                         </table>
                     </div>
@@ -225,75 +251,130 @@
     </div>
 
     <script>
-        document.addEventListener('DOMContentLoaded', function() {
-            // Agregar evento de doble clic a las celdas de la tabla
-            document.addEventListener('dblclick', function(e) {
-                if (e.target.tagName === 'TD') {
-                    e.target.classList.toggle('show-full-text');
+        async function consultarDatos() {
+            try {
+                const fecha = document.getElementById('fechaConsulta').value;
+                if (!fecha) {
+                    Swal.fire({
+                        icon: 'warning',
+                        title: 'Fecha requerida',
+                        text: 'Por favor, seleccione una fecha para consultar'
+                    });
+                    return;
                 }
-            });
 
-            const fechaHoy = new Date().toISOString().split('T')[0];
-            document.getElementById('fechaConsulta').value = fechaHoy;
-        });
-
-        function consultarDatos() {
-            const fecha = document.getElementById('fechaConsulta').value;
-            
-            fetch('/api/relacionados/consulta', {
-                method: 'POST',
-                headers: {
-                    'Content-Type': 'application/json',
-                },
-                body: JSON.stringify({ fecha: fecha })
-            })
-            .then(response => response.json())
-            .then(data => {
-                const tabla = document.getElementById('tablaResultados');
-                tabla.innerHTML = '';
-                
-                data.forEach(item => {
-                    const row = document.createElement('tr');
-                    row.innerHTML = `
-                        <td>${item.PROCESADA}</td>
-                        <td>${item.MENSAJE}</td>
-                        <td>${item.FILEPROCEFECHA}</td>
-                        <td>${item.DE3}</td>
-                        <td>${item.DE4}</td>
-                        <td>${item.DE6}</td>
-                        <td>${item.DE24}</td>
-                        <td>${item.DE25}</td>
-                        <td>${item.DE38}</td>
-                        <td>${item.DE43}</td>
-                        <td>${item.DE49}</td>
-                        <td>${item.DE51}</td>
-                        <td>${item.DE63}</td>
-                        <td>${item.AUTOVISATID}</td>
-                        <td>${item.CTA_INFI}</td>
-                        <td>${item.AUTOCODI}</td>
-                        <td>${item.AUTOFECHA}</td>
-                        <td>${item.CONSUFECHA}</td>
-                        <td>${item.CONSUMIPOR}</td>
-                        <td>${item.AUTOIMPOR}</td>
-                        <td>${item.ORIGEN_}</td>
-                        <td>${item.DIFERENCIA}</td>
-                        <td>${item.A_MAMBU}</td>
-                        <td>${item.RELA_OK}</td>
-                        <td>${item.ONL_OK}</td>
-                        <td>${item.STATUSMAMBU}</td>
-                    `;
-                    tabla.appendChild(row);
+                const response = await fetch('/api/relacionados/consulta', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify({ fecha })
                 });
-            })
-            .catch(error => {
+
+                const result = await response.json();
+                
+                if (!result.success) {
+                    throw new Error(result.message || 'Error al consultar los datos');
+                }
+
+                const datos = result.data;
+                
+                if (datos.length === 0) {
+                    Swal.fire({
+                        icon: 'info',
+                        title: 'Sin resultados',
+                        text: 'No se encontraron datos para la fecha seleccionada'
+                    });
+                    return;
+                }
+
+                // Limpiar tabla existente
+                const tbody = document.querySelector('tbody');
+                tbody.innerHTML = '';
+
+                // Función para aplicar color a toda la fila
+                const aplicarColor = (elemento, color) => {
+                    elemento.style.backgroundColor = color;
+                    const celdas = elemento.getElementsByTagName('td');
+                    for (let celda of celdas) {
+                        celda.style.backgroundColor = color;
+                    }
+                };
+
+                // Agregar nuevos datos
+                datos.forEach(row => {
+                    const tr = document.createElement('tr');
+                    const mensaje = row.MENSAJE || '';
+
+                    tr.innerHTML = `
+                        <td>${row.PROCESADA || ''}</td>
+                        <td>${mensaje}</td>
+                        <td>${row.FILEPROCEFECHA || ''}</td>
+                        <td>${row.DE3 || ''}</td>
+                        <td>${row.DE4 || ''}</td>
+                        <td>${row.DE6 || ''}</td>
+                        <td>${row.DE24 || ''}</td>
+                        <td>${row.DE25 || ''}</td>
+                        <td>${row.DE38 || ''}</td>
+                        <td>${row.DE43 || ''}</td>
+                        <td>${row.DE49 || ''}</td>
+                        <td>${row.DE51 || ''}</td>
+                        <td>${row.DE63 || ''}</td>
+                        <td>${row.AUTOVISATID || ''}</td>
+                        <td>${row.CTA_INFI || ''}</td>
+                        <td>${row.AUTOCODI || ''}</td>
+                        <td>${row.AUTOFECHA || ''}</td>
+                        <td>${row.CONSUFECHA || ''}</td>
+                        <td>${row.CONSUMIPOR || ''}</td>
+                        <td>${row.AUTOIMPOR || ''}</td>
+                        <td>${row.ORIGEN_ || ''}</td>
+                        <td>${row.DIFERENCIA || ''}</td>
+                        <td>${row.A_MAMBU || ''}</td>
+                        <td>${row.RELA_OK || ''}</td>
+                        <td>${row.ONL_OK || ''}</td>
+                        <td>${row.STATUSMAMBU || ''}</td>
+                    `;
+
+                    // Aplicar colores según el mensaje
+                    if (mensaje.startsWith('00-')) {
+                        aplicarColor(tr, '#ffff00'); // amarillo
+                    } else if (mensaje.startsWith('01-')) {
+                        aplicarColor(tr, '#00ff00'); // verde
+                    } else if (mensaje.startsWith('02-')) {
+                        aplicarColor(tr, '#FF8C00'); // naranja
+                    }
+
+                    // Agregar evento de doble clic para cambiar a verde
+                    tr.addEventListener('dblclick', function() {
+                        const currentColor = this.style.backgroundColor;
+                        if (currentColor === 'rgb(255, 255, 0)' || currentColor === '#ffff00' || // amarillo
+                            currentColor === 'rgb(255, 140, 0)' || currentColor === '#FF8C00') { // naranja
+                            aplicarColor(this, '#00ff00'); // cambiar a verde
+                        }
+                    });
+
+                    tbody.appendChild(tr);
+                });
+
+            } catch (error) {
                 console.error('Error:', error);
                 Swal.fire({
                     icon: 'error',
                     title: 'Error',
-                    text: 'Hubo un error al consultar los datos'
+                    text: error.message || 'Error al consultar los datos'
                 });
-            });
+            }
         }
+
+        // No cargar datos automáticamente al inicio
+        document.addEventListener('DOMContentLoaded', () => {
+            // Solo inicializar la fecha con la fecha actual
+            const today = new Date().toISOString().split('T')[0];
+            document.getElementById('fechaConsulta').value = today;
+        });
+
+        // Agregar el evento al botón de consulta
+        document.getElementById('btnConsultar').addEventListener('click', consultarDatos);
     </script>
 </body>
 </html>

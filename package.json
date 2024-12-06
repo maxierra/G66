@@ -1,24 +1,68 @@
 {
-  "name": "dashboard-app",
+  "name": "g66",
   "version": "1.0.0",
-  "description": "Dashboard application with hamburger menu",
-  "main": "app.js",
+  "description": "Dashboard application",
+  "main": "main.js",
   "scripts": {
-    "start": "node app.js",
-    "dev": "nodemon app.js"
+    "start": "electron .",
+    "build": "electron-builder",
+    "dist": "electron-builder --win",
+    "postinstall": "electron-builder install-app-deps"
+  },
+  "build": {
+    "appId": "com.tuempresa.g66",
+    "productName": "G66",
+    "files": [
+      "**/*",
+      "!database/global.db",
+      "!dist/*",
+      "!build/*"
+    ],
+    "extraResources": [
+      {
+        "from": "database/global.db",
+        "to": "database/global.db"
+      }
+    ],
+    "directories": {
+      "output": "dist",
+      "buildResources": "build"
+    },
+    "win": {
+      "target": "nsis",
+      "icon": "public/icon.ico"
+    },
+    "nsis": {
+      "oneClick": false,
+      "allowToChangeInstallationDirectory": true,
+      "createDesktopShortcut": true
+    },
+    "asar": true,
+    "asarUnpack": [
+      "node_modules/sqlite3/**/*",
+      "node_modules/better-sqlite3/**/*"
+    ]
   },
   "dependencies": {
-    "body-parser": "^1.20.2",
+    "better-sqlite3": "^11.6.0",
+    "body-parser": "^1.19.0",
     "cors": "^2.8.5",
     "csv-parser": "^3.0.0",
     "ejs": "^3.1.9",
     "express": "^4.18.2",
     "express-ejs-layouts": "^2.5.1",
+    "express-session": "^1.17.3",
     "multer": "^1.4.5-lts.1",
     "sqlite3": "^5.1.7",
     "xlsx": "^0.18.5"
   },
   "devDependencies": {
-    "nodemon": "^3.0.1"
+    "copy-webpack-plugin": "^11.0.0",
+    "electron": "^33.0.1",
+    "electron-builder": "^25.1.8",
+    "node-loader": "^2.0.0",
+    "nodemon": "^3.0.1",
+    "webpack": "^5.89.0",
+    "webpack-cli": "^5.1.4"
   }
 }

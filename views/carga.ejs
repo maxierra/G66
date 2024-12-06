@@ -1,0 +1,172 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Carga de Datos</title>
+    <link rel="stylesheet" href="/css/styles.css">
+    <style>
+        .error-message {
+            color: #dc3545;
+            margin: 10px 0;
+            padding: 10px;
+            border: 1px solid #dc3545;
+            border-radius: 4px;
+            display: none;
+        }
+        .success-message {
+            color: #28a745;
+            margin: 10px 0;
+            padding: 10px;
+            border: 1px solid #28a745;
+            border-radius: 4px;
+            display: none;
+        }
+        .progress-bar {
+            width: 100%;
+            height: 20px;
+            background-color: #f0f0f0;
+            border-radius: 4px;
+            margin: 10px 0;
+        }
+        .progress {
+            width: 0%;
+            height: 100%;
+            background-color: #007bff;
+            border-radius: 4px;
+            transition: width 0.3s ease;
+        }
+        .btn-primary {
+            background-color: #007bff;
+            color: white;
+            padding: 10px 20px;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+        }
+        .btn-primary:disabled {
+            background-color: #ccc;
+            cursor: not-allowed;
+        }
+        .form-group {
+            margin-bottom: 15px;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>Carga de Datos</h1>
+        <div class="upload-form">
+            <form id="uploadForm" enctype="multipart/form-data">
+                <div class="form-group">
+                    <label for="file">Seleccione el archivo Excel a cargar:</label>
+                    <input type="file" id="file" name="file" accept=".xlsx,.xls,.csv" required>
+                </div>
+                <button type="submit" class="btn-primary" id="submitButton">Cargar Archivo</button>
+            </form>
+            <div id="error" class="error-message"></div>
+            <div id="success" class="success-message"></div>
+            <div id="progress" style="display: none;">
+                <h3>Cargando datos...</h3>
+                <div class="progress-bar">
+                    <div class="progress" id="progressBar"></div>
+                </div>
+                <p id="progressText">Procesando registros: 0 de 0</p>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        const uploadForm = document.getElementById('uploadForm');
+        const submitButton = document.getElementById('submitButton');
+        const progress = document.getElementById('progress');
+        const progressBar = document.getElementById('progressBar');
+        const progressText = document.getElementById('progressText');
+        const errorDiv = document.getElementById('error');
+        const successDiv = document.getElementById('success');
+
+        function showError(message) {
+            errorDiv.textContent = message;
+            errorDiv.style.display = 'block';
+            successDiv.style.display = 'none';
+            progress.style.display = 'none';
+            submitButton.disabled = false;
+        }
+
+        function showSuccess(message) {
+            successDiv.textContent = message;
+            successDiv.style.display = 'block';
+            errorDiv.style.display = 'none';
+            progress.style.display = 'none';
+            submitButton.disabled = false;
+        }
+
+        function resetMessages() {
+            errorDiv.style.display = 'none';
+            successDiv.style.display = 'none';
+            progressBar.style.width = '0%';
+            progressText.textContent = 'Procesando registros: 0 de 0';
+        }
+
+        uploadForm.addEventListener('submit', async function(e) {
+            e.preventDefault();
+            resetMessages();
+            
+            const fileInput = document.getElementById('file');
+            const file = fileInput.files[0];
+            
+            if (!file) {
+                showError('Por favor seleccione un archivo');
+                return;
+            }
+
+            // Validar tipo de archivo
+            const validTypes = [
+                'application/vnd.ms-excel',
+                'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet',
+                'text/csv'
+            ];
+            const fileExtension = file.name.toLowerCase().split('.').pop();
+            
+            if (!validTypes.includes(file.type) && !['xls', 'xlsx', 'csv'].includes(fileExtension)) {
+                showError('Tipo de archivo no válido. Por favor seleccione un archivo Excel (.xls, .xlsx) o CSV');
+                return;
+            }
+
+            submitButton.disabled = true;
+            progress.style.display = 'block';
+            
+            try {
+                const formData = new FormData(this);
+                
+                const response = await fetch('/api/csv-import', {
+                    method: 'POST',
+                    body: formData
+                });
+                
+                let data;
+                try {
+                    data = await response.json();
+                } catch (error) {
+                    throw new Error('Error al procesar la respuesta del servidor');
+                }
+                
+                if (!response.ok) {
+                    throw new Error(data.error || 'Error al cargar el archivo');
+                }
+                
+                if (data.success) {
+                    const result = data.result || {};
+                    showSuccess(`Archivo procesado correctamente.\nRegistros procesados: ${result.totalProcessed || 0}\nErrores: ${result.errors || 0}`);
+                    fileInput.value = ''; // Limpiar el input
+                } else {
+                    throw new Error(data.error || 'Error desconocido durante el procesamiento');
+                }
+            } catch (error) {
+                console.error('Error durante la carga:', error);
+                showError(error.message || 'Error al procesar el archivo');
+            }
+        });
+    </script>
+</body>
+</html>

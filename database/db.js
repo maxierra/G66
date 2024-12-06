@@ -1,8 +1,32 @@
 const sqlite3 = require('sqlite3').verbose();
 const path = require('path');
+const fs = require('fs');
+
+// Obtener la ruta base correcta tanto para desarrollo como para producción
+const getBasePath = () => {
+    // En modo desarrollo
+    if (!process.resourcesPath) {
+        return path.join(__dirname, '..');
+    }
+    
+    // En modo producción (Electron)
+    if (process.type === 'renderer') {
+        return path.join(process.resourcesPath, 'app');
+    }
+    return process.resourcesPath;
+};
+
+// Asegurarse de que el directorio de la base de datos existe
+const dbDir = path.join(getBasePath(), 'database');
+if (!fs.existsSync(dbDir)) {
+    fs.mkdirSync(dbDir, { recursive: true });
+}
 
 // Crear conexión a la base de datos
-const db = new sqlite3.Database(path.join(__dirname, 'global.db'), (err) => {
+const dbPath = path.join(dbDir, 'global.db');
+console.log('Ruta de la base de datos:', dbPath);
+
+const db = new sqlite3.Database(dbPath, (err) => {
     if (err) {
         console.error('Error al conectar con la base de datos:', err);
     } else {
