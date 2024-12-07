@@ -1,0 +1,47 @@
+Función,Script Actual,Script Anterior,Diferencias,Estado
+processData(),✓,✓,"- Actual: Usa async/await
+- Actual: Mejor manejo de errores
+- Actual: Logging mejorado
+- Anterior: Procesamiento más simple",Modificado
+obtenerDatos(),✓,✓,"- Actual: Implementa fetch API
+- Actual: Validación de fecha
+- Actual: Mejor manejo de errores
+- Anterior: Método más directo",Modificado
+updateTables(),✓,✓,"- Actual: Mejor logging
+- Actual: Separación por país más clara
+- Anterior: Más simple",Similar
+generateCaseHTML(),✓,✓,"- Actual: Headers definidos globalmente
+- Actual: Mejor estructura de datos
+- Anterior: Más flexible con datos",Similar
+unificarCasos(),✓,✓,"- Actual: Validación de país
+- Actual: Mejor manejo de errores
+- Anterior: Proceso más directo",Modificado
+renumerarTodosLosCasos(),✓,✓,"- Actual: Separación por país
+- Actual: Mejor logging
+- Anterior: Proceso más simple",Similar
+loadMessageTemplates(),✓,✓,"- Actual: Mejor manejo de errores
+- Actual: Feedback visual de errores
+- Anterior: Carga simple",Mejorado
+updateMessage(),✓,✓,"- Actual: Más opciones de edición
+- Actual: Mejor UI/UX
+- Anterior: Proceso más directo",Mejorado
+insertEvidenceData(),✓,✓,"- Actual: Mejor manejo de datos nulos
+- Actual: Validación mejorada
+- Anterior: Inserción directa",Similar
+generateReport(),✓,✓,"- Actual: Mejor diseño y estilos
+- Actual: Más información en reporte
+- Anterior: Reporte básico",Mejorado
+trackDataCount(),✓,❌,"- Actual: Nueva funcionalidad
+- Anterior: No existe","Nuevo en Actual"
+filterCaseContainer(),✓,✓,"- Actual: Más opciones de filtrado
+- Actual: Mejor estructura
+- Anterior: Filtrado básico",Modificado
+deleteRow(),✓,✓,"- Actual: Confirmación de borrado
+- Actual: Mejor UI
+- Anterior: Borrado directo",Similar
+addRow(),✓,✓,"- Actual: Validación de datos
+- Actual: Mejor manejo de errores
+- Anterior: Inserción simple",Modificado
+combineCaseData(),✓,✓,"- Actual: Mejor validación
+- Actual: Logging detallado
+- Anterior: Proceso más simple",Modificado

@@ -1,0 +1,7 @@
+{
+    "messages": {
+        "default": "Mensaje por defecto",
+        "online": "Transacción ONLINE",
+        "forzada": "FORZADA en cierre lote"
+    }
+}

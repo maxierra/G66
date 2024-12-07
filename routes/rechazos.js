@@ -33,7 +33,7 @@ router.get('/consulta', (req, res) => {
                 ERRORSOURCE, ERRORREASON, REQUESTMESSAGECOMPLETE,
                 RESULTMESSAGECOMPLETE
             FROM db_globall66 
-            WHERE FILEPROCEFECHA LIKE ? || '%'
+            WHERE "Fecha Estado" LIKE ? || '%'
             AND RESULTMESSAGECOMPLETE LIKE '%StatusCode: 400%'
             ORDER BY 
                 CAST(Bin AS INTEGER) DESC,
@@ -48,7 +48,7 @@ router.get('/consulta', (req, res) => {
                 ERRORCODE, ERRORSOURCE, ERRORREASON, 
                 REQUESTMESSAGECOMPLETE, RESULTMESSAGECOMPLETE
             FROM db_globall66 
-            WHERE FILEPROCEFECHA LIKE ? || '%'
+            WHERE "Fecha Estado" LIKE ? || '%'
             AND RESULTMESSAGECOMPLETE LIKE '%StatusCode: 400%'
             ORDER BY 
                 CAST(Bin AS INTEGER) DESC,

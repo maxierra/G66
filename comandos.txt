@@ -1,0 +1,2 @@
+ powershell -ExecutionPolicy Bypass -File git_push.ps1
+ powershell -ExecutionPolicy Bypass -File build.ps1

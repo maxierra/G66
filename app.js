@@ -64,6 +64,10 @@ const csvImportRouter = require('./routes/csv-import');
 const rechazosRouter = require('./routes/rechazos');
 const relacionadosRouter = require('./routes/relacionados');
 const forzadasRouter = require('./routes/forzadas');
+const reporteMensualRouter = require('./routes/reporte-mensual');
+const tareasDiariasRouter = require('./routes/tareas-diarias');
+const dashboardsRouter = require('./routes/dashboards');
+const reporteIpmRouter = require('./routes/reporte-ipm');
 
 // Usar rutas
 app.use('/globales', globalesRouter);
@@ -75,6 +79,14 @@ app.use('/relacionados', relacionadosRouter);
 app.use('/api/relacionados', relacionadosRouter);
 app.use('/forzadas', forzadasRouter);
 app.use('/api/forzadas', forzadasRouter);
+app.use('/reporte-mensual', reporteMensualRouter);
+app.use('/api/reporte-mensual', reporteMensualRouter);
+app.use('/tareas-diarias', tareasDiariasRouter);
+app.use('/api/tareas-diarias', tareasDiariasRouter);
+app.use('/dashboards', dashboardsRouter);
+app.use('/api/dashboards', dashboardsRouter);
+app.use('/reporte-ipm', reporteIpmRouter);
+app.use('/api/reporte-ipm', reporteIpmRouter);
 
 // Rutas de vistas
 app.get('/', (req, res) => {
